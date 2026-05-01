@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://r2v4hvo65njp"]
+
+[ext_resource type="Script" uid="uid://csjt0ypip1noy" path="res://RTS_Camera.gd" id="1_f3sb7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gv5m4"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_f3sb7"]
+sky_material = SubResource("ProceduralSkyMaterial_gv5m4")
+
+[sub_resource type="Environment" id="Environment_fj7yv"]
+background_mode = 2
+sky = SubResource("Sky_f3sb7")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gv5m4"]
+albedo_color = Color(0.25565878, 0.25565878, 0.25565878, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f3sb7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_fj7yv"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tlwt5"]
+
+[node name="World" type="Node3D" unique_id=1905051055]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1364113326]
+environment = SubResource("Environment_fj7yv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=743753543]
+transform = Transform3D(-0.53054255, 0.50903517, 0.67779636, 0.014754667, -0.79394346, 0.6078126, 0.8475299, 0.3324711, 0.41371015, 8, 8, 19)
+shadow_enabled = true
+
+[node name="Field" type="MeshInstance3D" parent="." unique_id=143201396]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_gv5m4")
+mesh = SubResource("PlaneMesh_f3sb7")
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=96664631]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 1.9392852, -15)
+mesh = SubResource("BoxMesh_fj7yv")
+
+[node name="Unit" type="MeshInstance3D" parent="." unique_id=979447158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -11)
+mesh = SubResource("CylinderMesh_tlwt5")
+
+[node name="camera_base" type="Node3D" parent="." unique_id=960262713]
+script = ExtResource("1_f3sb7")
+camera_move_speed = 25.0
+camera_zoom_speed = 45.0
+camera_zoom_demp = 0.9
+camera_automatic_pan_speed = 14.0
+
+[node name="camera_socket" type="Node3D" parent="camera_base" unique_id=1992201555]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 3, 0)
+
+[node name="Camera3D" type="Camera3D" parent="camera_base/camera_socket" unique_id=1225464201]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1, 0, 0, 0)
