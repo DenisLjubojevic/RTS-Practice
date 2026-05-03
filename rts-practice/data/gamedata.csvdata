@@ -1,0 +1,7 @@
+TEST_A;TEST_B
+10;20
+1.0;True
+0.01;False
+"""Test string1""";"""String 2"""
+A;B
+C;D

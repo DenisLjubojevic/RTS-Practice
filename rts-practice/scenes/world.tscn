@@ -75,3 +75,6 @@ mesh = SubResource("PlaneMesh_f3sb7")
 
 [node name="testUnit" parent="." unique_id=683897135 instance=ExtResource("3_4wyf3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
+
+[node name="testUnit2" parent="." unique_id=877398214 instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -7)
