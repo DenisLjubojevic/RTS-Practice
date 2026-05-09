@@ -1,7 +1,7 @@
-TEST_A;TEST_B
-10;20
-1.0;True
-0.01;False
-"""Test string1""";"""String 2"""
-A;B
-C;D
+"ID";"NAME";"AGE"
+0;"Ante";20
+1;"Marko";10
+2;"Luka";12
+3;"Ivan";33
+4;"JAN";23
+5;"KIKI";15

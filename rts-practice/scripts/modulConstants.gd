@@ -5,3 +5,5 @@ extends RefCounted
 # -----------------------------------------------------------------------------
 
 const PATH_FOLDER_DATA: String = "res://data/"
+const FORMAT_CSV: String = ".csvdata"
+const FORMAT_DATA: String = ".data"
