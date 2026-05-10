@@ -4,8 +4,8 @@ extends RefCounted
 # Handle all our data building
 # -----------------------------------------------------------------------------
 
-const MODUL_CONSTANTS = preload("res://scripts/modulConstants.gd")
-const MODUL_FILE_MANAGER = preload("res://scripts/modulFileManager.gd")
+const MODULE_CONSTANTS = preload("res://scripts/moduleConstants.gd")
+const MODULE_FILE_MANAGER = preload("res://scripts/moduleFileManager.gd")
 
 static func encodeDataToString(text: String) -> String:
 	return Marshalls.utf8_to_base64(text)
@@ -14,18 +14,18 @@ static func decodeDataToString(text: String) -> String:
 	return Marshalls.base64_to_utf8(text)
 
 static func compileCSVDataFiles() -> void:
-	for file in DirAccess.get_files_at(MODUL_CONSTANTS.PATH_FOLDER_DATA):
-		if file.ends_with(MODUL_CONSTANTS.FORMAT_CSV):
-			MODUL_FILE_MANAGER.encodeDataFile(MODUL_CONSTANTS.PATH_FOLDER_DATA + file)
+	for file in DirAccess.get_files_at(MODULE_CONSTANTS.PATH_FOLDER_DATA):
+		if file.ends_with(MODULE_CONSTANTS.FORMAT_CSV):
+			MODULE_FILE_MANAGER.encodeDataFile(MODULE_CONSTANTS.PATH_FOLDER_DATA + file)
 
 static func buildDataDictionary(dictionary: Dictionary) -> void:
 	var dictNames: Array = dictionary.keys()
 	
 	var i: int = 0
 	for dict in dictNames:
-		for file in DirAccess.get_files_at(MODUL_CONSTANTS.PATH_FOLDER_DATA):
-			if file.count(dict) and file.ends_with(MODUL_CONSTANTS.FORMAT_DATA):
-				var encodedData: String = MODUL_FILE_MANAGER.loadTextFile(MODUL_CONSTANTS.PATH_FOLDER_DATA + file)
+		for file in DirAccess.get_files_at(MODULE_CONSTANTS.PATH_FOLDER_DATA):
+			if file.count(dict) and file.ends_with(MODULE_CONSTANTS.FORMAT_DATA):
+				var encodedData: String = MODULE_FILE_MANAGER.loadTextFile(MODULE_CONSTANTS.PATH_FOLDER_DATA + file)
 				var decodedData: String = decodeDataToString(encodedData)
 				var allCsvLines: PackedStringArray = decodedData.split("\r\n")
 				dictionary[dictNames[i]] = dataParseCSV(allCsvLines)

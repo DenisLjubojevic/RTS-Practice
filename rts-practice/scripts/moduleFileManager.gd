@@ -4,8 +4,8 @@ extends RefCounted
 # Handle file operations
 # -----------------------------------------------------------------------------
 
-const MODUL_CONSTANTS = preload("res://scripts/modulConstants.gd")
-const MODUL_DATA_COMPILER = preload("res://scripts/modulDataCompiler.gd")
+const MODULE_CONSTANTS = preload("res://scripts/moduleConstants.gd")
+const MODULE_DATA_COMPILER = preload("res://scripts/moduleDataCompiler.gd")
 
 static func printFile(filepath: String) -> void:
 	var text: String = FileAccess.open(filepath, FileAccess.READ).get_as_text()
@@ -34,7 +34,7 @@ static func encodeDataFile(filePath: String) -> void:
 	if !fileExists(filePath): return
 	
 	var loadFileData: String = FileAccess.open(filePath, FileAccess.READ).get_as_text()
-	var saveFilePath: String = filePath.replace(MODUL_CONSTANTS.FORMAT_CSV, MODUL_CONSTANTS.FORMAT_DATA)
+	var saveFilePath: String = filePath.replace(MODULE_CONSTANTS.FORMAT_CSV, MODULE_CONSTANTS.FORMAT_DATA)
 	
-	var encodedText: String = MODUL_DATA_COMPILER.encodeDataToString(loadFileData)
+	var encodedText: String = MODULE_DATA_COMPILER.encodeDataToString(loadFileData)
 	saveTextFile(saveFilePath, encodedText)

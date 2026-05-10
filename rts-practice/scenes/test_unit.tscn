@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bbemmuma7m6c8" path="res://scripts/select_indicator.gd" id="1_x353t"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_o0ck3"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_x353t"]
+height = 2.2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_x353t"]
-size = Vector3(1, 2, 1)
+[sub_resource type="CylinderMesh" id="CylinderMesh_o0ck3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x353t"]
 transparency = 3
@@ -18,18 +18,25 @@ material = SubResource("StandardMaterial3D_x353t")
 top_radius = 0.705
 height = 0.05
 
-[node name="testUnit" type="Node3D" unique_id=683897135]
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324]
 script = ExtResource("1_x353t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=334519099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_x353t")
 
 [node name="Unit" type="MeshInstance3D" parent="." unique_id=942542265]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CylinderMesh_o0ck3")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1975172324]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=334519099]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_x353t")
-
 [node name="SelectionCircle" type="MeshInstance3D" parent="." unique_id=1705695394]
 mesh = SubResource("CylinderMesh_knrx7")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=163682852]
+path_height_offset = 0.25
+avoidance_enabled = true
+debug_enabled = true
+
+[node name="Timer" type="Timer" parent="." unique_id=2134228999]
+wait_time = 0.25
+autostart = true

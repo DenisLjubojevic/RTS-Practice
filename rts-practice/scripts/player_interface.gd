@@ -16,14 +16,14 @@ func _ready() -> void:
 	initalizeInterface() 
 
 # detects when unit has entered visible area
-func unitEnterVisibleArea(unit: Node3D) -> void:
+func unitEnterVisibleArea(unit: CharacterBody3D) -> void:
 	var unitId: int = unit.get_instance_id()
 	
 	if visibleUnitsInArea.keys().has(unitId): return
-	visibleUnitsInArea[unitId] = unit.get_parent()
+	visibleUnitsInArea[unitId] = unit
 
 # detects when unit has exited visible area
-func unitExitVisibleArea(unit: Node3D) -> void:
+func unitExitVisibleArea(unit: CharacterBody3D) -> void:
 	var unitId: int = unit.get_instance_id()
 	
 	if !visibleUnitsInArea.keys().has(unitId): return
