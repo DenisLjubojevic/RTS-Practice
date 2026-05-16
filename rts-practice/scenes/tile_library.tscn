@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bluydjah5ywin"]
+
+[ext_resource type="Texture2D" uid="uid://dedl1qwj6r5c7" path="res://models/Terrain/GrassTile/grassTile.png" id="1_kmo4i"]
+[ext_resource type="ArrayMesh" uid="uid://b3na6df1hposs" path="res://models/Terrain/GrassTile/grassTile.obj" id="2_gy7xm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oymtw"]
+albedo_texture = ExtResource("1_kmo4i")
+texture_filter = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kmo4i"]
+
+[node name="TileLibrary" type="Node3D" unique_id=355693978]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1560780141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+material_override = SubResource("StandardMaterial3D_oymtw")
+mesh = ExtResource("2_gy7xm")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=508941202]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=1837914273]
+transform = Transform3D(0.8, 0, 0, 0, 0.2, 0, 0, 0, 0.8, 0, 0.1, 0)
+shape = SubResource("BoxShape3D_kmo4i")

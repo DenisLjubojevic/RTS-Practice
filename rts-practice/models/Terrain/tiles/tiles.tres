@@ -1,0 +1,38 @@
+[gd_resource type="ArrayMesh" format=4 uid="uid://cywoau8n6ndeo"]
+
+[ext_resource type="Texture2D" uid="uid://b0bv8b4eml2ti" path="res://models/Terrain/GrassTile/grassTile.png" id="1_0ax5m"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dfy5v"]
+resource_name = "x"
+albedo_texture = ExtResource("1_0ax5m")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7wjyq"]
+_surfaces = [{
+"aabb": AABB(-4, -1, -4, 8, 2, 8),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEAAgABAAQABQADAAAAAgAFAAAAAwAGAAEAAQAGAAQABQAGAAMABAAHAAIABwAFAAIABgAHAAQABwAGAAUA"),
+"name": "x",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAD/////AAAAAP//AAAAAP///////wAAAAAAAAAAAAD/////AAAAAAAAAAD//wAA//8AAAAAAAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[resource]
+_surfaces = [{
+"aabb": AABB(-4, -1, -4, 8, 2, 8),
+"attribute_data": PackedByteArray("/3//fwAA/3//fwAAAAAAAP///3//f/9///8AAP9/AAD/f/+fAAD/n/9//38AAP9/////n/9//5////9//3//f/9//78AAP+//3//nwAA/5////+//3//v////5//f/+f"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAFAAYABgAFAAcACAAJAAoACgAJAAsADAANAA4ADgANAA8AEAARABIAEgARABMAFAAVABYAFgAVABcA"),
+"material": SubResource("StandardMaterial3D_dfy5v"),
+"name": "x",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAD/////VNUAAP//AABU1f///////1TV/////wAAVNX//wAA//9U1f//AAAAAFTVAAAAAP//VNUAAAAAAABU1QAAAAAAAP////8AAAAA//8AAP//AAD///////8AAP////8AAP//AIAAAAAA//8AgP///////wCAAAD/////AIAAAAAA////vwAAAAAAAP+/AAD//////78AAP//AAD/v///AAAAAP+///8AAP///7//////AAD/v/////////+/qqqqqqqqqqqqqqqqqqqqqqoqVNWqKlTVqipU1aoqVNX/f////3////9/////f////3////9/////f////3////9/////f////3////9/////fwAA/38AAP9/AAD/fwAA")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7wjyq")
