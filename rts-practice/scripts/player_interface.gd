@@ -1,5 +1,7 @@
 extends Node2D
 
+const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
+
 # Nodes
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
@@ -11,6 +13,7 @@ var selectedUnits: Array = []
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
 var is_dragging: bool = false
+var drag_threshold: float = 5.0 
 
 func _ready() -> void:
 	initalizeInterface() 
@@ -43,9 +46,39 @@ func selectUnits() -> void:
 		if !is_instance_valid(unit): continue
 		var screen_pos = camera.unproject_position(unit.global_position)
 		if rect.has_point(screen_pos):
-			unit.selected = true
 			if !selectedUnits.has(unit):
-				selectedUnits.append(unit)
+				selectionAdd(unit)
+
+# add one unit to selected array
+func selectionAdd(unit: Node3D) -> void:
+	selectedUnits.append(unit)
+	unit.selected = true
+
+func selectMultipleUnits(unitsToSelect: Array) -> void:
+	for unit in unitsToSelect:
+		if !selectedUnits.has(unit):
+			selectionAdd(unit)
+
+# removing one unit from selected array
+func removeOneUnit(unitToRemove: Node3D) -> void:
+	var index: int = 0
+	for unit in selectedUnits:
+		if unit == unitToRemove:
+			selectedUnits.remove_at(index)
+			unitToRemove.selected = false
+			break
+		index += 1
+
+# removing multiple units from array
+func removeMultipleUnits(unitsToRemove: Array) -> void:
+	var index = 0
+	for unit in selectedUnits:
+		for unitToRemove in unitsToRemove:
+			if unit == unitToRemove:
+				selectedUnits.remove_at(index)
+				unit.selected = false
+				break
+		index += 1
 
 # deselect all units
 func deselectAllUnits() -> void:
@@ -54,21 +87,67 @@ func deselectAllUnits() -> void:
 			unit.selected = false
 	selectedUnits.clear()
 
+# select / unselect one unit
+func toggleSelectUnit(unit: Node3D) -> void:
+	if unit.selected:
+		removeOneUnit(unit)
+	else:
+		selectionAdd(unit)
+
 # detecting mouse left btn clicked
 func _input(event: InputEvent) -> void:
+	var shift: bool = Input.is_action_pressed("shift")
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.is_pressed():
 			drag_start = get_global_mouse_position()
-			is_dragging = true
-			deselectAllUnits()
+			is_dragging = false
 		else:
 			if is_dragging:
-				selectUnits()
+				selectionDragBox(shift)
+			else:
+				singleSelection(get_global_mouse_position(), shift)
 			is_dragging = false
 			queue_redraw()
 	
-	if event is InputEventMouseMotion and is_dragging:
-		queue_redraw()
+	if event is InputEventMouseMotion and Input.is_action_pressed("mouse_leftclick"):
+		if get_global_mouse_position().distance_to(drag_start) > drag_threshold:
+			is_dragging = true
+			queue_redraw()
+	
+	if Input.is_action_just_released("mouse_rightclick"):
+		if !selectedUnits.is_empty():
+			var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+			var camera: Camera3D = get_viewport().get_camera_3d()
+			var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
+			
+			if cameraRaycastCords != Vector3.ZERO:
+				for unit in selectedUnits:
+					if unit.has_method("moveUnit"):
+						unit.moveUnit(cameraRaycastCords)
+
+# dragbox selection
+func selectionDragBox(shiftEnabled: bool = false) ->void:
+	if !shiftEnabled: deselectAllUnits()
+	
+	selectUnits()
+
+func singleSelection(mouse2Dpos: Vector2, shift: bool) -> void:
+	var camera = get_viewport().get_camera_3d()
+	
+	for unit in visibleUnitsInArea.values():
+		var unit2Dpos: Vector2 = camera.unproject_position((unit as Node3D).transform.origin + Vector3(0, 0.85, 0))
+		
+		if mouse2Dpos.distance_to(unit2Dpos) < 30:
+			if shift:
+				toggleSelectUnit(unit)
+			else:
+				deselectAllUnits()
+				selectionAdd(unit)
+			return
+	
+	if !shift:
+		deselectAllUnits()
 
 # drawing selection box
 func _draw() -> void:
