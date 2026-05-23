@@ -5,6 +5,9 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 # Nodes
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
+@onready var nodeBuildingPlacer: Node3D = $buildingPlacement
+@onready var buildingPlacmentButton : Button = $Button
+
 
 # Variables
 @onready var visibleUnitsInArea: Dictionary =  {}
@@ -13,20 +16,67 @@ var selectedUnits: Array = []
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
 var is_dragging: bool = false
-var drag_threshold: float = 5.0 
+var drag_threshold: float = 5.0
+
+var _interface_input_mode: int:
+	set(newValue):
+		_interface_input_mode = newValue
+		
+		if _interface_input_mode == 1:
+			buildingPlacmentButton.show()
+			nodeBuildingPlacer.enableArea()
+		else:
+			nodeBuildingPlacer.hide()
+			nodeBuildingPlacer.disableArea()
+
+var _building_placer_can_place: bool = false
+var _building_placer_location: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
+	buildingPlacmentButton.pressed.connect(
+		func() -> void: _interface_input_mode = 1
+	)
+	_interface_input_mode = 0
 	initalizeInterface() 
 
+func _physics_process(delta: float) -> void:
+	if _interface_input_mode == 1:
+		var mouse_pos: Vector2 = get_global_mouse_position()
+		var camera: Camera3D = get_viewport().get_camera_3d()
+		
+		var ray_from: Vector3 = camera.project_ray_origin(mouse_pos)
+		var ray_to: Vector3 = ray_from + camera.project_ray_normal(mouse_pos) * 1000.0
+		var ray_param:  PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_from, ray_to)
+		ray_param.collision_mask = 0b10
+		
+		var raycasted_result: Variant = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
+		if raycasted_result:
+			if nodeBuildingPlacer.transform.origin != raycasted_result.position:
+				nodeBuildingPlacer.transform.origin = raycasted_result.position
+				nodeBuildingPlacer.show()
+				if nodeBuildingPlacer.placementCheck(visibleUnitsInArea):
+					_building_placer_location = raycasted_result.position
+					_building_placer_can_place = true
+				else:
+					_building_placer_can_place = false
+					_building_placer_location = Vector3.ZERO
+	else:
+		_building_placer_can_place = false
+		_building_placer_location = Vector3.ZERO
+
 # detects when unit has entered visible area
-func unitEnterVisibleArea(unit: CharacterBody3D) -> void:
+func unitEnterVisibleArea(unit: Node3D) -> void:
+	if not unit is CharacterBody3D: return
+	
 	var unitId: int = unit.get_instance_id()
 	
 	if visibleUnitsInArea.keys().has(unitId): return
 	visibleUnitsInArea[unitId] = unit
 
 # detects when unit has exited visible area
-func unitExitVisibleArea(unit: CharacterBody3D) -> void:
+func unitExitVisibleArea(unit: Node3D) -> void:
+	if not unit is CharacterBody3D: return
+	
 	var unitId: int = unit.get_instance_id()
 	
 	if !visibleUnitsInArea.keys().has(unitId): return
@@ -98,33 +148,51 @@ func toggleSelectUnit(unit: Node3D) -> void:
 func _input(event: InputEvent) -> void:
 	var shift: bool = Input.is_action_pressed("shift")
 	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.is_pressed():
-			drag_start = get_global_mouse_position()
-			is_dragging = false
-		else:
-			if is_dragging:
-				selectionDragBox(shift)
+	if _interface_input_mode == 1:
+		if Input.is_action_just_pressed("mouse_leftclick"):
+			if _building_placer_can_place and _building_placer_location != Vector3.ZERO:
+				var building_packed_scene: PackedScene = load("res://scenes/TurtleHQ.tscn")
+				var buildingNode: Node3D = building_packed_scene.instantiate()
+				get_parent().add_child(buildingNode)
+				buildingNode.transform.origin = _building_placer_location
+				
+				if !shift:
+					_interface_input_mode = 0
+	else:
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			if event.is_pressed():
+				drag_start = get_global_mouse_position()
+				is_dragging = false
 			else:
-				singleSelection(get_global_mouse_position(), shift)
-			is_dragging = false
-			queue_redraw()
-	
-	if event is InputEventMouseMotion and Input.is_action_pressed("mouse_leftclick"):
-		if get_global_mouse_position().distance_to(drag_start) > drag_threshold:
-			is_dragging = true
-			queue_redraw()
-	
-	if Input.is_action_just_released("mouse_rightclick"):
-		if !selectedUnits.is_empty():
-			var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-			var camera: Camera3D = get_viewport().get_camera_3d()
-			var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
-			
-			if cameraRaycastCords != Vector3.ZERO:
-				for unit in selectedUnits:
-					if unit.has_method("moveUnit"):
-						unit.moveUnit(cameraRaycastCords)
+				if is_dragging:
+					selectionDragBox(shift)
+				else:
+					singleSelection(get_global_mouse_position(), shift)
+				is_dragging = false
+				queue_redraw()
+		
+		if event is InputEventMouseMotion and Input.is_action_pressed("mouse_leftclick"):
+			if get_global_mouse_position().distance_to(drag_start) > drag_threshold:
+				is_dragging = true
+				queue_redraw()
+		
+		if Input.is_action_just_released("mouse_rightclick"):
+			if !selectedUnits.is_empty():
+				var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+				var camera: Camera3D = get_viewport().get_camera_3d()
+				var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
+				
+				if cameraRaycastCords != Vector3.ZERO:
+					for unit in selectedUnits:
+						if unit.has_method("moveUnit"):
+							unit.moveUnit(cameraRaycastCords)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed:
+			if _interface_input_mode == 1:
+				_interface_input_mode = 0
+				get_viewport().set_input_as_handled()
 
 # dragbox selection
 func selectionDragBox(shiftEnabled: bool = false) ->void:

@@ -72,9 +72,12 @@ _data = {
 &"walk": SubResource("Animation_c6cqp")
 }
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_o6j3i"]
+radius = 0.3
+
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324]
 collision_layer = 8
-collision_mask = 10
+collision_mask = 9
 script = ExtResource("1_x353t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=334519099]
@@ -90,7 +93,7 @@ avoidance_enabled = true
 max_speed = 4.0
 
 [node name="Timer" type="Timer" parent="." unique_id=2134228999]
-wait_time = 1.0999999999999999
+wait_time = 1.1
 autostart = true
 
 [node name="FirstUnit" type="MeshInstance3D" parent="." unique_id=1665636687]
@@ -106,3 +109,11 @@ speed_scale = 1.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 target_position = Vector3(0, -3, 0)
 collision_mask = 2
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1368453366]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=669590468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_o6j3i")

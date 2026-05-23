@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://de14mclc6k1rh"]
+
+[ext_resource type="ArrayMesh" uid="uid://deqecjknraxi0" path="res://models/turtleBuildings/turtleHQ.obj" id="1_wbqq6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vsqai"]
+size = Vector3(3.2, 2.8, 3.2)
+
+[node name="TurtleHq" type="Node3D" unique_id=1664330889]
+transform = Transform3D(-2, 0, 1.7484555e-07, 0, 2, 0, -1.7484555e-07, 0, -2, 0, 0, 0)
+
+[node name="TurtleHq" type="MeshInstance3D" parent="." unique_id=1265049942]
+mesh = ExtResource("1_wbqq6")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="TurtleHq" unique_id=1185896742]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TurtleHq/StaticBody3D" unique_id=1672643836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 1.6, 5.9604645e-08)
+shape = SubResource("BoxShape3D_vsqai")
