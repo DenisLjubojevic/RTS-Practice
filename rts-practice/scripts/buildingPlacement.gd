@@ -20,10 +20,13 @@ func enableArea() -> void:
 func disableArea() -> void:
 	areaCollisionShape.disabled = true
 
-func placementCheck(units: Dictionary) -> bool:
+func placementCheck(units: Dictionary, is_fow_visible: bool) -> bool:
 	model_red()
 	
 	if area.has_overlapping_bodies():
+		return false
+	
+	if not is_fow_visible:
 		return false
 	
 	var areaColShape: BoxShape3D = areaCollisionShape.shape

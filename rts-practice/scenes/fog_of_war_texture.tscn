@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://doway2b3ln7gv"]
+
+[ext_resource type="Script" uid="uid://c7m6xhdccnn76" path="res://scripts/fog_of_war_texture.gd" id="1_k2jqh"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y6kvc"]
+blend_mode = 3
+light_mode = 1
+
+[node name="FogOfWarTexture" type="Control" unique_id=19856072]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_k2jqh")
+
+[node name="Timer" type="Timer" parent="." unique_id=746048661]
+wait_time = 0.1
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1118641313]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1770017422]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="fowCamera" type="Camera2D" parent="SubViewportContainer/SubViewport" unique_id=1960894476]
+
+[node name="fowExplored" type="ColorRect" parent="SubViewportContainer/SubViewport" unique_id=1033557685]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="fowTexture" type="Sprite2D" parent="SubViewportContainer/SubViewport" unique_id=708778279]
+material = SubResource("CanvasItemMaterial_y6kvc")
+
+[node name="fowUnits" type="Node2D" parent="SubViewportContainer/SubViewport" unique_id=814229003]

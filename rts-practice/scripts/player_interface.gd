@@ -6,8 +6,7 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
 @onready var nodeBuildingPlacer: Node3D = $buildingPlacement
-@onready var buildingPlacmentButton : Button = $Button
-
+@onready var buildingPlacmentButton: Button = $placeBuildingButton
 
 # Variables
 @onready var visibleUnitsInArea: Dictionary =  {}
@@ -54,7 +53,11 @@ func _physics_process(delta: float) -> void:
 			if nodeBuildingPlacer.transform.origin != raycasted_result.position:
 				nodeBuildingPlacer.transform.origin = raycasted_result.position
 				nodeBuildingPlacer.show()
-				if nodeBuildingPlacer.placementCheck(visibleUnitsInArea):
+				
+				var world = get_parent() as Node3D
+				var is_fow_visible: bool = world.is_position_visible_in_fow(raycasted_result.position)
+				
+				if nodeBuildingPlacer.placementCheck(visibleUnitsInArea, is_fow_visible):
 					_building_placer_location = raycasted_result.position
 					_building_placer_can_place = true
 				else:
@@ -155,6 +158,9 @@ func _input(event: InputEvent) -> void:
 				var buildingNode: Node3D = building_packed_scene.instantiate()
 				get_parent().add_child(buildingNode)
 				buildingNode.transform.origin = _building_placer_location
+				
+				var world: Node3D = get_parent() as Node3D
+				world.add_to_fow(buildingNode, 48)
 				
 				if !shift:
 					_interface_input_mode = 0
