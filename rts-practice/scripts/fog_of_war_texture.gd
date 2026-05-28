@@ -10,7 +10,6 @@ signal fow_updated
 
 var fog_of_war_stored: Array
 var fog_of_war_main_image: Image
-var fog_of_war_current_image: Image
 var fog_of_war_main_texture: ImageTexture
 var fog_of_war_viewport_texture: ImageTexture
 
@@ -24,8 +23,6 @@ func _ready() -> void:
 	fog_of_war_timer.start()
 
 func fog_of_war_tick_loop() -> void:
-	fog_of_war_current_image.fill(Color(0.0, 0.0, 0.0, 1.0))
-	
 	fog_of_war_units_data_process()
 	fog_of_war_dissolve_all_units()
 	
@@ -50,13 +47,6 @@ func new_fog_of_war(new_map_rect: Rect2) -> void:
 	)
 	fog_of_war_main_image.fill(Color(0.0, 0.0, 0.0, 1.0))
 	
-	fog_of_war_current_image = Image.create(
-		int(map_rect.size.x),
-		int(map_rect.size.y),
-		false,Image.FORMAT_RGBA8
-	)
-	fog_of_war_current_image.fill(Color(0.0, 0.0, 0.0, 1.0))
-	
 	update_texture()
 
 func update_texture() -> void:
@@ -67,14 +57,7 @@ func fog_of_war_dissolve(dissolve_position: Vector2, dissolve_image: Image) -> v
 	var dissolve_image_used_rect: Rect2 = dissolve_image.get_used_rect()
 	dissolve_position -= dissolve_image_used_rect.size * 0.50
 	
-	var grey_image = dissolve_image.duplicate()
-	for x in range(grey_image.get_width()):
-		for y in range(grey_image.get_height()):
-			var pixel = grey_image.get_pixel(x, y)
-			grey_image.set_pixel(x, y, Color(0.4, 0.4, 0.4, pixel.a))
-	fog_of_war_main_image.blend_rect(grey_image, dissolve_image_used_rect, dissolve_position)
-	
-	fog_of_war_current_image.blend_rect(dissolve_image, dissolve_image_used_rect, dissolve_position)
+	fog_of_war_main_image.blend_rect(dissolve_image, dissolve_image_used_rect, dissolve_position)
 	
 	update_texture()
 
@@ -87,8 +70,8 @@ func fog_of_war_units_data_process() -> void:
 		var world_pos = (unit_data[0] as Node3D).global_position
 		
 		var position_to_2D: Vector2 = Vector2(
-			world_pos.x - map_rect.position.x,
-			world_pos.z - map_rect.position.y
+			(unit_data[0] as Node3D).global_position.x,
+			(unit_data[0] as Node3D).global_position.z
 		)
 		
 		(unit_data[1] as Sprite2D).set_position(position_to_2D)
@@ -96,16 +79,14 @@ func fog_of_war_units_data_process() -> void:
 func fog_of_war_dissolve_all_units() -> void:
 	for fow_sprite in fog_of_war_units.get_children():
 		var fow_sprite_image: Image = (fow_sprite as Sprite2D).get_texture().get_image()
-		var dissolve_position: Vector2 = (fow_sprite as Sprite2D).position
-		fog_of_war_dissolve(dissolve_position, fow_sprite_image)
 		
-		#var sprite_stored_position_size: Vector3i = Vector3i(
-			#(fow_sprite as Sprite2D).position.x,
-			#(fow_sprite as Sprite2D).position.y,
-			#(fow_sprite as Sprite2D).get_texture().get_size().x
-		#)
-		#
-		#if !sprite_stored_position_size in fog_of_war_stored:
-			#var dissolve_position: Vector2 = (fow_sprite as Sprite2D).position
-			#fog_of_war_dissolve(dissolve_position, fow_sprite_image)
-			#fog_of_war_stored.append(sprite_stored_position_size)
+		var sprite_stored_position_size: Vector3i = Vector3i(
+			(fow_sprite as Sprite2D).position.x,
+			(fow_sprite as Sprite2D).position.y,
+			(fow_sprite as Sprite2D).get_texture().get_size().x
+		)
+		
+		if !sprite_stored_position_size in fog_of_war_stored:
+			var dissolve_position: Vector2 = (fow_sprite as Sprite2D).position
+			fog_of_war_dissolve(dissolve_position, fow_sprite_image)
+			fog_of_war_stored.append(sprite_stored_position_size)
