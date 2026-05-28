@@ -32,10 +32,10 @@ func _ready() -> void:
 		dynamic_object.hide()
 
 func is_position_visible_in_fow(world_pos: Vector3) -> bool:
-	if FOW.fog_of_war_main_image == null: return false
-	var pixel_x = clamp(int(world_pos.x), 0, FOW.fog_of_war_main_image.get_width() - 1)
-	var pixel_y = clamp(int(world_pos.z), 0, FOW.fog_of_war_main_image.get_height() - 1)
-	return FOW.fog_of_war_main_image.get_pixel(pixel_x, pixel_y).r > 0.4
+	if FOW.fog_of_war_current_image  == null: return false
+	var pixel_x = clamp(int(world_pos.x), 0, FOW.fog_of_war_current_image .get_width() - 1)
+	var pixel_y = clamp(int(world_pos.z), 0, FOW.fog_of_war_current_image .get_height() - 1)
+	return FOW.fog_of_war_current_image .get_pixel(pixel_x, pixel_y).r > 0.3
 
 func add_to_fow(fow_node: Node3D, vision_size: int = 32) -> void:
 	var new_sprite: Sprite2D = Sprite2D.new()

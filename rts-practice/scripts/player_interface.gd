@@ -160,7 +160,7 @@ func _input(event: InputEvent) -> void:
 				buildingNode.transform.origin = _building_placer_location
 				
 				var world: Node3D = get_parent() as Node3D
-				world.add_to_fow(buildingNode, 48)
+				world.add_to_fow(buildingNode, 64)
 				
 				if !shift:
 					_interface_input_mode = 0
