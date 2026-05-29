@@ -19,11 +19,18 @@ var selected: bool = false:
 		selection_circle.visible = value
 
 func _ready() -> void:
+	set_physics_process(false)
+	set_process(false)
+	
 	set_max_slides(2)
 	selection_circle.visible = false
 	navigation_agent.velocity_computed.connect(charaterMove)
 	navigationPathTimer.timeout.connect(navigationPathTimerUpdate)
 	animPlayer.play("Idle")
+	
+	await (get_tree().process_frame)
+	set_physics_process(true)
+	set_process(true)
 
 # updates velocity of agent so he knows where to move
 func _physics_process(delta: float) -> void:
@@ -31,7 +38,8 @@ func _physics_process(delta: float) -> void:
 		animPlayer.play("Idle")
 		return
 	
-	position.y = graviryRaycast.get_collision_point().y
+	if Engine.get_physics_frames() % 3 == 0:
+		position.y = graviryRaycast.get_collision_point().y
 	
 	animPlayer.play("walk")
 	var nextPosition: Vector3 = navigation_agent.get_next_path_position()
@@ -78,6 +86,8 @@ func cancelNavigation() -> void:
 
 # method to move character after it got a signal
 func charaterMove(newVelocity: Vector3) -> void:
+	if navigation_agent.is_navigation_finished(): newVelocity.y = 0
+	
 	velocity = newVelocity
 	
 	var collision: KinematicCollision3D = move_and_collide(newVelocity * get_physics_process_delta_time())

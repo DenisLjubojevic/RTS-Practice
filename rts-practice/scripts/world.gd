@@ -1,6 +1,6 @@
 extends Node3D
 
-var world_size: Vector2i = Vector2i(71.2, 71.2) # IN meters / pixels
+var world_size: Vector2i = Vector2i(142, 142) # IN meters / pixels
 
 @onready var FOW: Control = $FogOfWarTexture
 @onready var worldmap_mesh: MeshInstance3D = $fowMesh

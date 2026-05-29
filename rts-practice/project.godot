@@ -18,10 +18,15 @@ config/icon="res://icon.svg"
 [autoload]
 
 Globals="*uid://d383pfjoikyir"
+DebugMenu="*uid://cggqb75a8w8r"
 
 [display]
 
 window/size/always_on_top=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/debug_menu/plugin.cfg")
 
 [input]
 
