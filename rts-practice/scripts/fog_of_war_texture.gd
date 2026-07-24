@@ -1,6 +1,7 @@
 extends Control
 
 signal fow_updated
+signal _dissolve_finished
 
 @onready var fog_of_war_camera: Camera2D = $SubViewportContainer/SubViewport/fowCamera
 @onready var fog_of_war_viewport: SubViewport = $SubViewportContainer/SubViewport
@@ -8,7 +9,6 @@ signal fow_updated
 @onready var fog_of_war_units: Node2D = $SubViewportContainer/SubViewport/fowUnits
 @onready var fog_of_war_timer: Timer = $Timer
 
-var fog_of_war_stored: Array
 var fog_of_war_main_image: Image
 var fog_of_war_current_image: Image
 var fog_of_war_main_texture: ImageTexture
@@ -33,7 +33,10 @@ func fog_of_war_tick_loop() -> void:
 		fog_of_war_viewport.get_texture().get_image()
 	)
 	
+	await _dissolve_finished
+	
 	emit_signal("fow_updated")
+	fog_of_war_timer.start()
 
 func new_fog_of_war(new_map_rect: Rect2) -> void:
 	map_rect = new_map_rect
@@ -89,21 +92,16 @@ func fog_of_war_units_data_process() -> void:
 		(unit_data[1] as Sprite2D).set_position(position_to_2D)
 
 func fog_of_war_dissolve_all_units() -> void:
-	for fow_sprite in fog_of_war_units.get_children():
-		var fow_sprite_image: Image = (fow_sprite as Sprite2D).get_texture().get_image()
-		var dissolve_position: Vector2 = (fow_sprite as Sprite2D).position
-		
-		fog_of_war_current_image.blend_rect(
-			fow_sprite_image, 
-			fow_sprite_image.get_used_rect(), 
-			dissolve_position - fow_sprite_image.get_used_rect().size * 0.5
-		)
-		
-		var sprite_stored_position_size: Vector3i = Vector3i(
-			(fow_sprite as Sprite2D).position.x,
-			(fow_sprite as Sprite2D).position.y,
-			(fow_sprite as Sprite2D).get_texture().get_size().x
-		)
-		if !sprite_stored_position_size in fog_of_war_stored:
-			fog_of_war_dissolve(dissolve_position, fow_sprite_image)
-			fog_of_war_stored.append(sprite_stored_position_size)
+	fog_of_war_sprite.modulate = Color(1.0, 1.0, 1.0)
+	await RenderingServer.frame_post_draw
+	var  fow_units_combined: Image = fog_of_war_viewport.get_texture().get_image()
+	
+	if fow_units_combined.get_format() != Image.FORMAT_RGBA8:
+		fow_units_combined.convert(Image.FORMAT_RGBA8)
+	
+	fog_of_war_main_image.blend_rect(fow_units_combined, fow_units_combined.get_used_rect(), Vector2i.ZERO)
+	fog_of_war_current_image.blend_rect(fow_units_combined, fow_units_combined.get_used_rect(), Vector2i.ZERO)
+	
+	update_texture()
+	fog_of_war_sprite.modulate = Color(0.149, 0.149, 0.149)
+	emit_signal("_dissolve_finished")

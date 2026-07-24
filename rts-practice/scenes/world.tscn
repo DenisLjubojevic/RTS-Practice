@@ -4,12 +4,21 @@
 [ext_resource type="Script" uid="uid://csjt0ypip1noy" path="res://scripts/RTS_Camera.gd" id="1_nnsk1"]
 [ext_resource type="Script" uid="uid://csixfdlo3tnmc" path="res://scripts/player_interface.gd" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://doway2b3ln7gv" path="res://scenes/fog_of_war_texture.tscn" id="2_7r4gi"]
-[ext_resource type="PackedScene" uid="uid://qa8g8ke1px6v" path="res://scenes/test_unit.tscn" id="3_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://qa8g8ke1px6v" path="res://scenes/turtleUnit.tscn" id="3_4wyf3"]
 [ext_resource type="MeshLibrary" uid="uid://cpestviqpnlf4" path="res://models/Terrain/tiles/tile_library.tres" id="3_k0juu"]
+[ext_resource type="Script" uid="uid://bmy1n01i4yw" path="res://scripts/minimap.gd" id="4_e3hyu"]
 [ext_resource type="ArrayMesh" uid="uid://deqecjknraxi0" path="res://models/turtleBuildings/turtleHQ.obj" id="5_71j4m"]
 [ext_resource type="Script" uid="uid://dwtkattlpevyw" path="res://scripts/buildingPlacement.gd" id="5_i7141"]
 [ext_resource type="Shader" uid="uid://ccx42yjdylgci" path="res://shaders/buildingPlacment.gdshader" id="5_qfnet"]
 [ext_resource type="Shader" uid="uid://na62jio8mx4x" path="res://shaders/fog_of_war.gdshader" id="8_w7kh3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w7kh3"]
+bg_color = Color(0.4, 0.2328, 0.13599999, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.32052875, 0.15951297, 0.066317774, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4wyf3"]
 size = Vector3(150.53732, 1, 137.49216)
@@ -64,8 +73,99 @@ script = ExtResource("1_rwgxs")
 metadata/_edit_lock_ = true
 
 [node name="NinePatchRect" type="NinePatchRect" parent="Player_Interface" unique_id=477816139]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Background" type="Panel" parent="Player_Interface/NinePatchRect" unique_id=636175048]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 448.0
+offset_bottom = 448.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_w7kh3")
+
+[node name="ActionPanel" type="HBoxContainer" parent="Player_Interface/NinePatchRect/Background" unique_id=1477104593]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 200.0
+offset_top = -191.0
+offset_right = 1144.0
+offset_bottom = -11.0
+grow_vertical = 0
+
+[node name="placeBuildingButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1814899917]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Place building"
+
+[node name="BuildingPanel" type="PanelContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1923324889]
+custom_minimum_size = Vector2(820, 0)
+layout_direction = 3
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel/BuildingPanel" unique_id=794317350]
+layout_mode = 2
+
+[node name="BuildingLabel" type="Label" parent="Player_Interface/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer" unique_id=91998577]
+layout_mode = 2
+text = "Selected Building"
+horizontal_alignment = 1
+
+[node name="TrainUnitButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer" unique_id=1490980196]
+layout_direction = 2
+layout_mode = 2
+text = "Train unit
+"
+
+[node name="MinimapContainer" type="Panel" parent="Player_Interface/NinePatchRect/Background" unique_id=1262891748]
+custom_minimum_size = Vector2(180, 180)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.03
+offset_top = -189.97
+offset_right = 190.03
+offset_bottom = -9.969971
+grow_vertical = 0
+script = ExtResource("4_e3hyu")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Player_Interface/NinePatchRect/Background/MinimapContainer" unique_id=1764171689]
+layout_mode = 0
+offset_right = 179.97
+offset_bottom = 179.97
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Player_Interface/NinePatchRect/Background/MinimapContainer/SubViewportContainer" unique_id=1107827784]
+handle_input_locally = false
+size = Vector2i(179, 179)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Player_Interface/NinePatchRect/Background/MinimapContainer/SubViewportContainer/SubViewport" unique_id=666502744]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 72.254654, 17.345116, 72.33275)
+rotation_edit_mode = 1
+projection = 1
+size = 143.43
+far = 21.43
+
+[node name="MinimapIcons" type="Control" parent="Player_Interface/NinePatchRect/Background/MinimapContainer" unique_id=76254752]
+anchors_preset = 0
+offset_left = -10.03
+offset_top = -458.03
+offset_right = 29.970001
+offset_bottom = -418.03
 
 [node name="camera_base" type="Node3D" parent="Player_Interface" unique_id=960262713]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.597073, 0, 32.919144)
@@ -88,13 +188,6 @@ collision_mask = 9
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player_Interface/camera_base/visible_units_ares3D" unique_id=224967401]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8254585, 0.5, -22.781021)
 shape = SubResource("BoxShape3D_4wyf3")
-
-[node name="placeBuildingButton" type="Button" parent="Player_Interface" unique_id=1814899917]
-offset_left = 32.0
-offset_top = 576.0
-offset_right = 148.0
-offset_bottom = 607.0
-text = "Place building"
 
 [node name="buildingPlacement" type="Node3D" parent="Player_Interface" unique_id=1831080782]
 transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 15.795158, 0.19, 18.198217)
@@ -913,6 +1006,7 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17.2
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 18.893772, 0.2582159, -5.1189995)
 
 [node name="dynamic_objects" type="Node3D" parent="." unique_id=1877849766]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.246704, 0, 0)
 
 [node name="TreeTest" type="MeshInstance3D" parent="dynamic_objects" unique_id=1605678872]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 53.519554, 2.6739964, 64.21887)

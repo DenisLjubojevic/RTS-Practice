@@ -6,16 +6,23 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
 @onready var nodeBuildingPlacer: Node3D = $buildingPlacement
-@onready var buildingPlacmentButton: Button = $placeBuildingButton
+@onready var buildingPlacmentButton: Button = $NinePatchRect/Background/ActionPanel/placeBuildingButton
+@onready var buildingPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/BuildingPanel
+@onready var trainUnitButton: Button = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
 
 # Variables
 @onready var visibleUnitsInArea: Dictionary =  {}
 var selectedUnits: Array = []
+var selectedBuilding: Node3D = null
 
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
 var is_dragging: bool = false
 var drag_threshold: float = 5.0
+
+signal building_selected(building: Node3D)
+signal building_deselected
+
 
 var _interface_input_mode: int:
 	set(newValue):
@@ -37,6 +44,22 @@ func _ready() -> void:
 	)
 	_interface_input_mode = 0
 	initalizeInterface() 
+	
+	building_selected.connect(_on_building_selected)
+	building_deselected.connect(_on_building_deselected)
+	trainUnitButton.pressed.connect(_on_train_unit_pressed)
+	buildingPanel.hide()
+
+func _on_building_selected(building: Node3D) -> void:
+	print("Selected building: ", building.name)
+	buildingPanel.show()
+
+func _on_building_deselected() -> void:
+	buildingPanel.hide()
+
+func _on_train_unit_pressed() -> void:
+	if selectedBuilding and selectedBuilding.has_method("train_unit"):
+		selectedBuilding.train_unit()
 
 func _physics_process(delta: float) -> void:
 	if _interface_input_mode == 1:
@@ -148,8 +171,14 @@ func toggleSelectUnit(unit: Node3D) -> void:
 		selectionAdd(unit)
 
 # detecting mouse left btn clicked
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	var shift: bool = Input.is_action_pressed("shift")
+	
+	if event is InputEventKey and event.pressed:
+		if _interface_input_mode == 1:
+			_interface_input_mode = 0
+			get_viewport().set_input_as_handled()
+		return
 	
 	if _interface_input_mode == 1:
 		if Input.is_action_just_pressed("mouse_leftclick"):
@@ -193,13 +222,6 @@ func _input(event: InputEvent) -> void:
 						if unit.has_method("moveUnit"):
 							unit.moveUnit(cameraRaycastCords)
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if event.pressed:
-			if _interface_input_mode == 1:
-				_interface_input_mode = 0
-				get_viewport().set_input_as_handled()
-
 # dragbox selection
 func selectionDragBox(shiftEnabled: bool = false) ->void:
 	if !shiftEnabled: deselectAllUnits()
@@ -220,8 +242,30 @@ func singleSelection(mouse2Dpos: Vector2, shift: bool) -> void:
 				selectionAdd(unit)
 			return
 	
+	var ray_from:  Vector3 = camera.project_ray_origin(mouse2Dpos)
+	var ray_to: Vector3 = ray_from + camera.project_ray_normal(mouse2Dpos) * 1000.0
+	var ray_param := PhysicsRayQueryParameters3D.create(ray_from, ray_to)
+	ray_param.collision_mask = 0b100
+	var result: Dictionary = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
+	
+	if result:
+		if !shift: deselectAllUnits()
+		selectBuilding(result.collider.owner)
+		return
+	
+	deselectBuilding()
+	
 	if !shift:
 		deselectAllUnits()
+
+func selectBuilding(building: Node3D) -> void:
+	selectedBuilding = building
+	building_selected.emit(building)
+
+func deselectBuilding() -> void:
+	if selectedBuilding:
+		selectedBuilding = null
+		building_deselected.emit()
 
 # drawing selection box
 func _draw() -> void:

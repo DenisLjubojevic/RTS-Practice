@@ -90,6 +90,8 @@ shift={
 
 [layer_names]
 
+3d_physics/layer_2="terrain"
+3d_physics/layer_3="building"
 3d_physics/layer_4="unit"
 
 [physics]
