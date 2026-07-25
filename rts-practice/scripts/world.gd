@@ -20,6 +20,9 @@ func _ready() -> void:
 			)
 	)
 	
+	for existing_building in get_tree().get_nodes_in_group("Buildings"):
+		add_to_fow(existing_building, 64)
+	
 	for dynamic_object in $dynamic_objects.get_children():
 		dynamic_object.hide()
 

@@ -77,6 +77,7 @@ radius = 10.0
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324]
 collision_layer = 8
+collision_mask = 5
 script = ExtResource("1_x353t")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=334519099]

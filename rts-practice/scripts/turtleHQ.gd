@@ -2,6 +2,7 @@ extends Node3D
 
 @export var unit_scene: PackedScene = preload("res://scenes/turtleUnit.tscn")
 @export var train_time: float = 5.0
+@export var building_type: String = "TurtleHQ"
 
 @onready var spawn_point: Marker3D = $SpawnPoint
 @onready var train_timer: Timer = $TrainTimer
@@ -10,6 +11,8 @@ var is_training: bool = false
 
 func _ready() -> void:
 	train_timer.timeout.connect(_on_train_finished)
+	if not is_in_group("Buildings"):
+		add_to_group("Buildings")
 
 func train_unit() -> void:
 	if is_training: return
@@ -28,3 +31,8 @@ func _on_train_finished() -> void:
 	var world: Node3D = get_tree().current_scene
 	if world.has_method("register_unit"):
 		world.register_unit(new_unit)
+
+func get_train_progress() -> float:
+	if not is_training:
+		return -1.0
+	return 1.0 - (train_timer.time_left / train_time)

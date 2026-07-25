@@ -8,12 +8,16 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var nodeBuildingPlacer: Node3D = $buildingPlacement
 @onready var buildingPlacmentButton: Button = $NinePatchRect/Background/ActionPanel/placeBuildingButton
 @onready var buildingPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/BuildingPanel
-@onready var trainUnitButton: Button = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
+@onready var buildingLabel: Label = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/BuildingLabel
+@onready var trainUnitButton: TextureButton = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
+@onready var buildGrid: GridContainer = $NinePatchRect/Background/ActionPanel/buildGrid
+@onready var trainProgressBar: ProgressBar = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
 
 # Variables
 @onready var visibleUnitsInArea: Dictionary =  {}
 var selectedUnits: Array = []
 var selectedBuilding: Node3D = null
+var _selected_building_scene_path: String = "res://scenes/TurtleHQ.tscn"
 
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
@@ -39,19 +43,44 @@ var _building_placer_can_place: bool = false
 var _building_placer_location: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
-	buildingPlacmentButton.pressed.connect(
-		func() -> void: _interface_input_mode = 1
-	)
 	_interface_input_mode = 0
 	initalizeInterface() 
 	
+	buildingPanel.hide()
 	building_selected.connect(_on_building_selected)
 	building_deselected.connect(_on_building_deselected)
+	
 	trainUnitButton.pressed.connect(_on_train_unit_pressed)
-	buildingPanel.hide()
+	trainUnitButton.texture_normal = load("res://image/icons/icon_unit_turtle.png")
+	trainProgressBar.hide()
+	
+	buildGrid.hide()
+	buildingPlacmentButton.pressed.connect(_on_build_button_pressed)
+	populate_build_menu()
+
+func populate_build_menu() -> void:
+	var buildings_data: Dictionary = Globals.data["buildings"]
+	for building_id in buildings_data.keys():
+		var info: Dictionary = buildings_data[building_id]
+		var btn := TextureButton.new()
+		btn.texture_normal = load(info["ICON"])
+		btn.custom_minimum_size = Vector2(48, 48)
+		btn.pressed.connect(_on_building_option_pressed.bind(info["SCENE"]))
+		buildGrid.add_child(btn)
+
+func _on_build_button_pressed() -> void:
+	buildGrid.visible = not buildGrid.visible
+
+func _on_building_option_pressed(scene_path: String) -> void:
+	_selected_building_scene_path = scene_path
+	buildGrid.hide()
+	_interface_input_mode = 1
 
 func _on_building_selected(building: Node3D) -> void:
-	print("Selected building: ", building.name)
+	if building.has_method("get") and "building_type" in building:
+		buildingLabel.text = building.building_type
+	else:
+		buildingLabel.text = "Not recognized building"
 	buildingPanel.show()
 
 func _on_building_deselected() -> void:
@@ -60,6 +89,15 @@ func _on_building_deselected() -> void:
 func _on_train_unit_pressed() -> void:
 	if selectedBuilding and selectedBuilding.has_method("train_unit"):
 		selectedBuilding.train_unit()
+
+func _process(_delta: float) -> void:
+	if selectedBuilding and selectedBuilding.has_method("get_train_progress"):
+		var progress: float = selectedBuilding.get_train_progress()
+		if progress >= 0.0:
+			trainProgressBar.show()
+			trainProgressBar.value = progress
+		else:
+			trainProgressBar.hide()
 
 func _physics_process(delta: float) -> void:
 	if _interface_input_mode == 1:
@@ -185,11 +223,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			if _building_placer_can_place and _building_placer_location != Vector3.ZERO:
 				var building_packed_scene: PackedScene = load("res://scenes/TurtleHQ.tscn")
 				var buildingNode: Node3D = building_packed_scene.instantiate()
-				get_parent().add_child(buildingNode)
+				get_parent().add_child(buildingNode, true)
 				buildingNode.transform.origin = _building_placer_location
 				
 				var world: Node3D = get_parent() as Node3D
-				world.add_to_fow(buildingNode, 64)
+				world.add_to_fow(buildingNode, 64)	
 				
 				if !shift:
 					_interface_input_mode = 0
