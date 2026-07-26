@@ -24,6 +24,7 @@ func _ready() -> void:
 	
 	set_max_slides(2)
 	selection_circle.visible = false
+	navigation_agent.avoidance_enabled = true
 	navigation_agent.velocity_computed.connect(charaterMove)
 	navigationPathTimer.timeout.connect(navigationPathTimerUpdate)
 	animPlayer.play("Idle")

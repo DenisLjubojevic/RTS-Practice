@@ -6,7 +6,8 @@ const MODULE_FILE_MANAGER = preload("res://scripts/moduleFileManager.gd")
 
 var data: Dictionary = {
 	"gamedata": {},
-	"buildings": {}
+	"buildings": {},
+	"units": {}
 }
 
 func _ready() -> void:

@@ -1,8 +1,7 @@
-extends Node3D
+extends "res://scripts/base_building.gd"
 
-@export var unit_scene: PackedScene = preload("res://scenes/turtleUnit.tscn")
+@export var unit_scene: PackedScene = preload("res://scenes/turtleBuilder.tscn")
 @export var train_time: float = 5.0
-@export var building_type: String = "TurtleHQ"
 
 @onready var spawn_point: Marker3D = $SpawnPoint
 @onready var train_timer: Timer = $TrainTimer
@@ -10,9 +9,8 @@ extends Node3D
 var is_training: bool = false
 
 func _ready() -> void:
+	super._ready()
 	train_timer.timeout.connect(_on_train_finished)
-	if not is_in_group("Buildings"):
-		add_to_group("Buildings")
 
 func train_unit() -> void:
 	if is_training: return

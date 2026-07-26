@@ -12,12 +12,14 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var trainUnitButton: TextureButton = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
 @onready var buildGrid: GridContainer = $NinePatchRect/Background/ActionPanel/buildGrid
 @onready var trainProgressBar: ProgressBar = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
+@onready var visibleUnitsInArea: Dictionary =  {}
+@onready var constructionBarsLayer: Control = $NinePatchRect/ConstructionBarsLayer
 
 # Variables
-@onready var visibleUnitsInArea: Dictionary =  {}
 var selectedUnits: Array = []
 var selectedBuilding: Node3D = null
 var _selected_building_scene_path: String = "res://scenes/TurtleHQ.tscn"
+var construction_sites: Dictionary = {}
 
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
@@ -83,6 +85,15 @@ func _on_building_selected(building: Node3D) -> void:
 		buildingLabel.text = "Not recognized building"
 	buildingPanel.show()
 
+func update_selection_ui() -> void:
+	var has_builder: bool = false
+	for unit in selectedUnits:
+		if unit is BuilderUnit:
+			has_builder = true
+			break
+	buildingPlacmentButton.visible = has_builder
+	buildingPanel.visible = false
+
 func _on_building_deselected() -> void:
 	buildingPanel.hide()
 
@@ -91,6 +102,28 @@ func _on_train_unit_pressed() -> void:
 		selectedBuilding.train_unit()
 
 func _process(_delta: float) -> void:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	var to_remove: Array = []
+	
+	for building in construction_sites.keys():
+		if not is_instance_valid(building):
+			to_remove.append(building)
+			continue
+		var bar: ProgressBar = construction_sites[building]
+		var progress: float = building.get_construction_progress()
+		
+		if progress < 0.0:
+			construction_sites[building].queue_free()
+			to_remove.append(building)
+			continue
+		
+		bar.value = progress
+		var screen_pos: Vector2 = camera.unproject_position(building.global_position + Vector3(0, building.get_bar_height_offset(), 0))
+		bar.position = screen_pos - bar.custom_minimum_size * 0.5
+	
+	for building in to_remove:
+		construction_sites.erase(building)
+	
 	if selectedBuilding and selectedBuilding.has_method("get_train_progress"):
 		var progress: float = selectedBuilding.get_train_progress()
 		if progress >= 0.0:
@@ -167,11 +200,13 @@ func selectUnits() -> void:
 func selectionAdd(unit: Node3D) -> void:
 	selectedUnits.append(unit)
 	unit.selected = true
+	update_selection_ui()
 
 func selectMultipleUnits(unitsToSelect: Array) -> void:
 	for unit in unitsToSelect:
 		if !selectedUnits.has(unit):
 			selectionAdd(unit)
+	update_selection_ui()
 
 # removing one unit from selected array
 func removeOneUnit(unitToRemove: Node3D) -> void:
@@ -182,6 +217,7 @@ func removeOneUnit(unitToRemove: Node3D) -> void:
 			unitToRemove.selected = false
 			break
 		index += 1
+	update_selection_ui()
 
 # removing multiple units from array
 func removeMultipleUnits(unitsToRemove: Array) -> void:
@@ -193,6 +229,7 @@ func removeMultipleUnits(unitsToRemove: Array) -> void:
 				unit.selected = false
 				break
 		index += 1
+	update_selection_ui()
 
 # deselect all units
 func deselectAllUnits() -> void:
@@ -200,6 +237,7 @@ func deselectAllUnits() -> void:
 		if is_instance_valid(unit):
 			unit.selected = false
 	selectedUnits.clear()
+	update_selection_ui()
 
 # select / unselect one unit
 func toggleSelectUnit(unit: Node3D) -> void:
@@ -225,9 +263,16 @@ func _unhandled_input(event: InputEvent) -> void:
 				var buildingNode: Node3D = building_packed_scene.instantiate()
 				get_parent().add_child(buildingNode, true)
 				buildingNode.transform.origin = _building_placer_location
+				buildingNode.building_type = "TurtleHQ"
 				
 				var world: Node3D = get_parent() as Node3D
 				world.add_to_fow(buildingNode, 64)	
+				
+				for builder in selectedUnits:
+					if builder is BuilderUnit:
+						buildingNode.builders_assigned.append(builder)
+						builder.assign_to_build(buildingNode)
+						register_construction_site(buildingNode)
 				
 				if !shift:
 					_interface_input_mode = 0
@@ -253,8 +298,27 @@ func _unhandled_input(event: InputEvent) -> void:
 			if !selectedUnits.is_empty():
 				var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 				var camera: Camera3D = get_viewport().get_camera_3d()
-				var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
 				
+				var ray_from: Vector3 = camera.project_ray_origin(mouse_pos)
+				var ray_to: Vector3 = ray_from + camera.project_ray_normal(mouse_pos) * 1000
+				var ray_param := PhysicsRayQueryParameters3D.create(ray_from, ray_to)
+				ray_param.collision_mask = 0b100
+				var building_result: Dictionary = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
+				if building_result:
+					var building: Node3D = building_result.collider.owner
+					var assigned_any: bool = false
+					if building is BaseBuilding and not building.is_constructed:
+						for unit in selectedUnits:
+							if unit is BuilderUnit:
+								building.builders_assigned.append(unit)
+								unit.assign_to_build(building)
+								assigned_any = true
+						if assigned_any and not construction_sites.has(building):
+							register_construction_site(building)
+					if assigned_any:
+						return
+				
+				var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
 				if cameraRaycastCords != Vector3.ZERO:
 					for unit in selectedUnits:
 						if unit.has_method("moveUnit"):
@@ -314,3 +378,20 @@ func _draw() -> void:
 	
 	draw_rect(rect, Color(0.49, 0.81, 1.0, 0.15))
 	draw_rect(rect, Color(0.49, 0.81, 1.0, 0.9), false, 1.5)
+
+func register_construction_site(building: Node3D) -> void:
+	var bar := ProgressBar.new()
+	bar.custom_minimum_size = Vector2(100, 10)
+	bar.max_value = 1.0
+	bar.show_percentage = false
+	
+	var fill_style := StyleBoxFlat.new()
+	fill_style.bg_color = Color(0.9, 0.7, 0.1)
+	bar.add_theme_stylebox_override("fill", fill_style)
+
+	var bg_style := StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.1, 0.1, 0.1, 0.6)
+	bar.add_theme_stylebox_override("background", bg_style)
+	
+	constructionBarsLayer.add_child(bar)
+	construction_sites[building] = bar
