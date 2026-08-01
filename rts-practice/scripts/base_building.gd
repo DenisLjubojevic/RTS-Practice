@@ -52,8 +52,10 @@ func get_construction_progress() -> float:
 func get_interaction_range() -> float:
 	var shape: Shape3D = selection_collision.shape
 	if shape is BoxShape3D: 
-		return (shape as BoxShape3D).size.length() * 0.5 + 1.0
-	return 3.0
+		var box: BoxShape3D = shape as BoxShape3D
+		var footprint_diagonal: float = Vector2(box.size.x, box.size.z).length()
+		return footprint_diagonal * 0.5 + 0.3
+	return 1.5
 
 func setup_nav_obstacle() -> void:
 	var shape: Shape3D = selection_collision.shape

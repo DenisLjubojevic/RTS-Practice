@@ -5,21 +5,27 @@ extends "res://scripts/base_unit.gd"
 
 var is_building: bool = false
 var build_target: Node3D = null
+var _default_desired_distance: float
 
-func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO) -> void:
+func _ready() -> void:
+	super._ready()
+	_default_desired_distance = navigation_agent.target_desired_distance
+
+func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO, apply_jitter: bool = true) -> void:
 	if is_building:
 		stop_building()
-	super.moveUnit(newMovementGoal)
+	super.moveUnit(newMovementGoal, apply_jitter)
 
 func assign_to_build(building: Node3D) -> void:
 	build_target = building
 	navigation_agent.target_desired_distance = building.get_interaction_range()
-	moveUnit(building.global_position)
+	moveUnit(building.global_position, false)
 	is_building = true
 
 func stop_building() -> void:
 	is_building = false
 	build_target = null
+	navigation_agent.target_desired_distance = _default_desired_distance
 
 func _physics_process(delta: float) -> void:
 	super._physics_process(delta)

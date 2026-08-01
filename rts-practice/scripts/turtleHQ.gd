@@ -1,6 +1,6 @@
 extends "res://scripts/base_building.gd"
 
-@export var unit_scene: PackedScene = preload("res://scenes/turtleBuilder.tscn")
+@export var unit_scene: PackedScene = preload("res://scenes/turtleUnit.tscn")
 @export var train_time: float = 5.0
 
 @onready var spawn_point: Marker3D = $SpawnPoint

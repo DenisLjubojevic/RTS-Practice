@@ -76,6 +76,7 @@ _data = {
 radius = 10.0
 
 [node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_x353t")
@@ -91,7 +92,7 @@ mesh = SubResource("CylinderMesh_knrx7")
 path_height_offset = 0.1
 avoidance_enabled = true
 radius = 0.3
-max_speed = 4.0
+max_speed = 2.0
 
 [node name="Timer" type="Timer" parent="." unique_id=2134228999]
 wait_time = 1.1
