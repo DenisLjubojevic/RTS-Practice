@@ -6,7 +6,7 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
 @onready var nodeBuildingPlacer: Node3D = $buildingPlacement
-@onready var buildingPlacmentButton: Button = $NinePatchRect/Background/ActionPanel/placeBuildingButton
+@onready var buildingPlacmentButton: Button = $NinePatchRect/Background/ActionPanel/VBoxContainer/placeBuildingButton
 @onready var buildingPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/BuildingPanel
 @onready var buildingLabel: Label = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/BuildingLabel
 @onready var trainUnitButton: TextureButton = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
@@ -14,12 +14,17 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var trainProgressBar: ProgressBar = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
 @onready var visibleUnitsInArea: Dictionary =  {}
 @onready var constructionBarsLayer: Control = $NinePatchRect/ConstructionBarsLayer
+@onready var formationButton: Button = $NinePatchRect/Background/ActionPanel/VBoxContainer/formationButton
+@onready var formationPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/FormationPanel
+@onready var gridFormationButton: Button = $NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/GridFormationButton
+@onready var splitFormationButton: Button = $NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/SplitFormationButton
 
 # Variables
 var selectedUnits: Array = []
 var selectedBuilding: Node3D = null
 var _selected_building_scene_path: String = "res://scenes/TurtleHQ.tscn"
 var construction_sites: Dictionary = {}
+var current_formation: String = "none"
 
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
@@ -59,6 +64,12 @@ func _ready() -> void:
 	buildGrid.hide()
 	buildingPlacmentButton.pressed.connect(_on_build_button_pressed)
 	populate_build_menu()
+	
+	formationPanel.hide()
+	formationButton.visible = false
+	formationButton.pressed.connect(func(): formationPanel.visible = not formationPanel.visible)
+	gridFormationButton.pressed.connect(func(): current_formation = "grid"; formationPanel.hide(); apply_formation_in_place())
+	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationPanel.hide(); apply_formation_in_place())
 
 func populate_build_menu() -> void:
 	var buildings_data: Dictionary = Globals.data["buildings"]
@@ -93,6 +104,7 @@ func update_selection_ui() -> void:
 			break
 	buildingPlacmentButton.visible = has_builder
 	buildingPanel.visible = false
+	formationButton.visible = selectedUnits.size() > 1
 
 func _on_building_deselected() -> void:
 	buildingPanel.hide()
@@ -320,9 +332,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				
 				var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
 				if cameraRaycastCords != Vector3.ZERO:
-					for unit in selectedUnits:
+					var target_positions: Array = compute_formation_positions(selectedUnits, cameraRaycastCords)
+					var assignment: Dictionary = assign_units_to_positions(selectedUnits, target_positions)
+					for unit in assignment.keys():
 						if unit.has_method("moveUnit"):
-							unit.moveUnit(cameraRaycastCords)
+							unit.moveUnit(assignment[unit])
 
 # dragbox selection
 func selectionDragBox(shiftEnabled: bool = false) ->void:
@@ -395,3 +409,107 @@ func register_construction_site(building: Node3D) -> void:
 	
 	constructionBarsLayer.add_child(bar)
 	construction_sites[building] = bar
+
+func compute_formation_positions(units: Array, target: Vector3) -> Array:
+	var n: int = units.size()
+	if n <= 1 or current_formation == "none":
+		var result: Array = []
+		for i in n: result.append(target)
+		return result
+	
+	var group_center: Vector3 = Vector3.ZERO
+	for unit in units:
+		group_center += (unit as Node3D).global_position
+	group_center /= n
+	
+	var direction: Vector3 = target - group_center
+	if direction.length() < 0.01:
+		direction = Vector3(0, 0, 1)
+	direction = direction.normalized()
+	var right: Vector3 = Vector3(-direction.z, 0, direction.x)
+	
+	match current_formation:
+		"grid": return compute_grid_positions(n, target, direction, right)
+		"split": return compute_split_positions(n, target, direction, right)
+	
+	var fallback: Array = []
+	for i in n: fallback.append(target)
+	return fallback
+
+func assign_units_to_positions(units: Array, target_positions: Array) -> Dictionary:
+	var n: int = units.size()
+	var cost: Array = []
+	for i in n:
+		var row: Array = []
+		var unit_pos: Vector3 = (units[i] as Node3D).global_position
+		for j in n:
+			row.append(unit_pos.distance_squared_to(target_positions[j]))
+		cost.append(row)
+	
+	var assignment_indices: Array = FormationMath.hungarian_assign(cost)
+	var assignment: Dictionary = {}
+	for i in n:
+		assignment[units[i]] = target_positions[assignment_indices[i]]
+	return assignment
+
+func apply_formation_in_place() -> void:
+	if selectedUnits.size() <= 1: return
+	
+	var group_center: Vector3 = Vector3.ZERO
+	for unit in selectedUnits:
+		group_center += (unit as Node3D).global_position
+	group_center /= selectedUnits.size()
+	
+	var target_positions: Array = compute_formation_positions(selectedUnits, group_center)
+	var assignment: Dictionary = assign_units_to_positions(selectedUnits, target_positions)
+	for unit in assignment.keys():
+		if unit.has_method("moveUnit"):
+			unit.moveUnit(assignment[unit])
+
+func compute_grid_positions(n: int, target: Vector3, direction: Vector3, right: Vector3) -> Array:
+	var spacing: float = 1.5
+	var columns: int = ceili(sqrt(n))
+	var positions: Array = []
+	for i in n:
+		var row: int = i / columns
+		var col: int = i % columns
+		var x_offset: float = (col - (columns - 1) / 2.0) * spacing
+		var z_offset: float = row * spacing
+		positions.append(target - direction * z_offset + right * x_offset)
+	return positions
+
+func compute_split_positions(n: int, target: Vector3, direction: Vector3, right: Vector3) -> Array:
+	var spacing: float = 1.5
+	var group_gap: float = 6.0
+	
+	var left_count: int = ceili(n / 2.0)
+	var right_count: int = n - left_count
+	
+	var left_columns: int = ceili(sqrt(left_count)) if left_count > 0 else 0
+	var right_columns: int = ceili(sqrt(right_count)) if right_count > 0 else 0
+	
+	var left_half_width: float = (left_columns - 1) * spacing * 0.5
+	var right_half_width: float = (right_columns - 1) * spacing * 0.5
+	
+	var left_offset: float = left_half_width + group_gap * 0.5
+	var right_offset: float = right_half_width + group_gap * 0.5
+	
+	var positions: Array = []
+	positions += compute_cluster(left_count, target - right * left_offset, direction, right, -1)
+	positions += compute_cluster(right_count, target + right * right_offset, direction, right, 1)
+	return positions
+
+func compute_cluster(count: int, cluster_center: Vector3, direction: Vector3, right: Vector3, side: int) -> Array:
+	if count <= 0:
+		return []
+	
+	var spacing: float = 1.5
+	var columns: int = ceili(sqrt(count))
+	var positions: Array = []
+	for i in count:
+		var row: int = i / columns
+		var col: int = i % columns
+		var x_offset: float = (col - (columns - 1) / 2.0) * spacing
+		var z_offset: float = row * spacing
+		positions.append(cluster_center - direction * z_offset + right * x_offset)
+	return positions

@@ -109,11 +109,17 @@ offset_right = 1144.0
 offset_bottom = -11.0
 grow_vertical = 0
 
-[node name="placeBuildingButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1814899917]
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=2124921273]
+layout_mode = 2
+
+[node name="placeBuildingButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel/VBoxContainer" unique_id=1814899917]
 layout_mode = 2
 size_flags_vertical = 0
 text = "Place building"
+
+[node name="formationButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel/VBoxContainer" unique_id=1493775569]
+layout_mode = 2
+text = "Formations"
 
 [node name="buildGrid" type="GridContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1967888795]
 visible = false
@@ -122,6 +128,7 @@ layout_mode = 2
 columns = 4
 
 [node name="BuildingPanel" type="PanelContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1923324889]
+visible = false
 custom_minimum_size = Vector2(820, 0)
 layout_direction = 3
 layout_mode = 2
@@ -147,6 +154,21 @@ grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_q5onr")
 max_value = 1.0
 show_percentage = false
+
+[node name="FormationPanel" type="PanelContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel" unique_id=1768344969]
+custom_minimum_size = Vector2(820, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player_Interface/NinePatchRect/Background/ActionPanel/FormationPanel" unique_id=187374388]
+layout_mode = 2
+
+[node name="GridFormationButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer" unique_id=1638552663]
+layout_mode = 2
+text = "Grid"
+
+[node name="SplitFormationButton" type="Button" parent="Player_Interface/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer" unique_id=908505068]
+layout_mode = 2
+text = "Split"
 
 [node name="MinimapContainer" type="Panel" parent="Player_Interface/NinePatchRect/Background" unique_id=1262891748]
 custom_minimum_size = Vector2(180, 180)
@@ -277,6 +299,33 @@ transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 4.7707253, 0.20000076, -16.238401)
 building_type = "TurtleHQ"
 is_constructed = true
+
+[node name="StartingTurtleBuilder4" parent="Units" unique_id=1878302360 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 4, 0.2, -8)
+
+[node name="StartingTurtleBuilder5" parent="Units" unique_id=1742236564 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 5, 0.2, -6)
+
+[node name="StartingTurtleBuilder6" parent="Units" unique_id=819398549 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 6, 0.2, -8)
+
+[node name="StartingTurtleBuilder7" parent="Units" unique_id=942745225 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 0, 0.2, -5)
+
+[node name="StartingTurtleBuilder8" parent="Units" unique_id=309865825 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 1, 0.2, -3)
+
+[node name="StartingTurtleBuilder9" parent="Units" unique_id=777152096 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 2, 0.2, -5)
+
+[node name="StartingTurtleBuilder10" parent="Units" unique_id=1656173964 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 4, 0.2, -5)
+
+[node name="StartingTurtleBuilder11" parent="Units" unique_id=743458304 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 5, 0.2, -3)
+
+[node name="StartingTurtleBuilder12" parent="Units" unique_id=39939000 groups=["Units"] instance=ExtResource("11_q5onr")]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 6, 0.2, -5)
 
 [node name="dynamic_objects" type="Node3D" parent="." unique_id=1877849766]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.246704, 0, 0)

@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 	var newAgentVelocity: Vector3 = velocity + steeredVelocity
 	navigation_agent.set_velocity(newAgentVelocity)
 
-func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO, apply_jitter: bool = true) -> void:
+func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO) -> void:
 	stuckCount = 0
 	
 	navigationPathGoalPosition = newMovementGoal

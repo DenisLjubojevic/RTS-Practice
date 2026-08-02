@@ -11,15 +11,15 @@ func _ready() -> void:
 	super._ready()
 	_default_desired_distance = navigation_agent.target_desired_distance
 
-func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO, apply_jitter: bool = true) -> void:
+func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO) -> void:
 	if is_building:
 		stop_building()
-	super.moveUnit(newMovementGoal, apply_jitter)
+	super.moveUnit(newMovementGoal)
 
 func assign_to_build(building: Node3D) -> void:
 	build_target = building
 	navigation_agent.target_desired_distance = building.get_interaction_range()
-	moveUnit(building.global_position, false)
+	moveUnit(building.global_position)
 	is_building = true
 
 func stop_building() -> void:
