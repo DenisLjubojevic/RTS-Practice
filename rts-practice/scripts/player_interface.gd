@@ -6,18 +6,18 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var player_camera: Node3D = $camera_base
 @onready var player_camera_visibleunits_Area3D: Area3D = $camera_base/visible_units_ares3D
 @onready var nodeBuildingPlacer: Node3D = $buildingPlacement
-@onready var buildingPlacmentButton: Button = $NinePatchRect/Background/ActionPanel/VBoxContainer/placeBuildingButton
-@onready var buildingPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/BuildingPanel
-@onready var buildingLabel: Label = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/BuildingLabel
-@onready var trainUnitButton: TextureButton = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
-@onready var buildGrid: GridContainer = $NinePatchRect/Background/ActionPanel/buildGrid
-@onready var trainProgressBar: ProgressBar = $NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
+@onready var buildingPlacmentButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/VBoxContainer/placeBuildingButton
+@onready var buildingPanel: PanelContainer = $UIRoot/NinePatchRect/Background/ActionPanel/BuildingPanel
+@onready var buildingLabel: Label = $UIRoot/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/BuildingLabel
+@onready var trainUnitButton: TextureButton = $UIRoot/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton
+@onready var buildGrid: GridContainer = $UIRoot/NinePatchRect/Background/ActionPanel/buildGrid
+@onready var trainProgressBar: ProgressBar = $UIRoot/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
 @onready var visibleUnitsInArea: Dictionary =  {}
-@onready var constructionBarsLayer: Control = $NinePatchRect/ConstructionBarsLayer
-@onready var formationButton: Button = $NinePatchRect/Background/ActionPanel/VBoxContainer/formationButton
-@onready var formationPanel: PanelContainer = $NinePatchRect/Background/ActionPanel/FormationPanel
-@onready var gridFormationButton: Button = $NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/GridFormationButton
-@onready var splitFormationButton: Button = $NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/SplitFormationButton
+@onready var constructionBarsLayer: Control = $UIRoot/NinePatchRect/ConstructionBarsLayer
+@onready var formationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/VBoxContainer/formationButton
+@onready var formationPanel: PanelContainer = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel
+@onready var gridFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/GridFormationButton
+@onready var splitFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/SplitFormationButton
 
 # Variables
 var selectedUnits: Array = []
@@ -67,7 +67,7 @@ func _ready() -> void:
 	
 	formationPanel.hide()
 	formationButton.visible = false
-	formationButton.pressed.connect(func(): formationPanel.visible = not formationPanel.visible)
+	formationButton.pressed.connect(_on_formation_button_pressed)
 	gridFormationButton.pressed.connect(func(): current_formation = "grid"; formationPanel.hide(); apply_formation_in_place())
 	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationPanel.hide(); apply_formation_in_place())
 
@@ -83,6 +83,11 @@ func populate_build_menu() -> void:
 
 func _on_build_button_pressed() -> void:
 	buildGrid.visible = not buildGrid.visible
+	formationPanel.visible = false
+
+func _on_formation_button_pressed() -> void:
+	formationPanel.visible = not formationPanel.visible
+	buildGrid.visible = false
 
 func _on_building_option_pressed(scene_path: String) -> void:
 	_selected_building_scene_path = scene_path
@@ -105,6 +110,11 @@ func update_selection_ui() -> void:
 	buildingPlacmentButton.visible = has_builder
 	buildingPanel.visible = false
 	formationButton.visible = selectedUnits.size() > 1
+	
+	if not has_builder:
+		buildGrid.hide()
+	if selectedUnits.size() <= 1:
+		formationPanel.hide()
 
 func _on_building_deselected() -> void:
 	buildingPanel.hide()
@@ -146,6 +156,13 @@ func _process(_delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	if _interface_input_mode == 1:
+		_building_placer_can_place = false
+		_building_placer_location = Vector3.ZERO
+		
+		if is_mouse_on_navbar():
+			nodeBuildingPlacer.model_red()
+			return
+		
 		var mouse_pos: Vector2 = get_global_mouse_position()
 		var camera: Camera3D = get_viewport().get_camera_3d()
 		
@@ -156,19 +173,17 @@ func _physics_process(delta: float) -> void:
 		
 		var raycasted_result: Variant = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
 		if raycasted_result:
-			if nodeBuildingPlacer.transform.origin != raycasted_result.position:
-				nodeBuildingPlacer.transform.origin = raycasted_result.position
-				nodeBuildingPlacer.show()
-				
-				var world = get_parent() as Node3D
-				var is_fow_visible: bool = world.is_position_visible_in_fow(raycasted_result.position)
-				
-				if nodeBuildingPlacer.placementCheck(visibleUnitsInArea, is_fow_visible):
-					_building_placer_location = raycasted_result.position
-					_building_placer_can_place = true
-				else:
-					_building_placer_can_place = false
-					_building_placer_location = Vector3.ZERO
+			nodeBuildingPlacer.transform.origin = raycasted_result.position
+			nodeBuildingPlacer.show()
+			
+			var world = get_parent() as Node3D
+			var is_fow_visible: bool = world.is_position_visible_in_fow(raycasted_result.position)
+			
+			if nodeBuildingPlacer.placementCheck(visibleUnitsInArea, is_fow_visible):
+				_building_placer_location = raycasted_result.position
+				_building_placer_can_place = true
+		else:
+			nodeBuildingPlacer.model_red()
 	else:
 		_building_placer_can_place = false
 		_building_placer_location = Vector3.ZERO
@@ -262,32 +277,44 @@ func toggleSelectUnit(unit: Node3D) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	var shift: bool = Input.is_action_pressed("shift")
 	
-	if event is InputEventKey and event.pressed:
+	if event.is_action_pressed("ui_cancel"):
 		if _interface_input_mode == 1:
 			_interface_input_mode = 0
 			get_viewport().set_input_as_handled()
 		return
 	
+	if event is InputEventKey:
+		return
+	
 	if _interface_input_mode == 1:
-		if Input.is_action_just_pressed("mouse_leftclick"):
-			if _building_placer_can_place and _building_placer_location != Vector3.ZERO:
-				var building_packed_scene: PackedScene = load("res://scenes/TurtleHQ.tscn")
-				var buildingNode: Node3D = building_packed_scene.instantiate()
-				get_parent().add_child(buildingNode, true)
-				buildingNode.transform.origin = _building_placer_location
-				buildingNode.building_type = "TurtleHQ"
-				
-				var world: Node3D = get_parent() as Node3D
-				world.add_to_fow(buildingNode, 64)	
-				
-				for builder in selectedUnits:
-					if builder is BuilderUnit:
-						buildingNode.builders_assigned.append(builder)
-						builder.assign_to_build(buildingNode)
+		if event is InputEventMouseButton and not event.pressed:
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				if _building_placer_can_place and _building_placer_location != Vector3.ZERO:
+					var building_packed_scene: PackedScene = load("res://scenes/TurtleHQ.tscn")
+					var buildingNode: Node3D = building_packed_scene.instantiate()
+					get_parent().add_child(buildingNode, true)
+					buildingNode.transform.origin = _building_placer_location
+					buildingNode.building_type = "TurtleHQ"
+					
+					var world: Node3D = get_parent() as Node3D
+					world.add_to_fow(buildingNode, 64)	
+					
+					var assigned_any: bool = false
+					for builder in selectedUnits:
+						if builder is BuilderUnit:
+							buildingNode.builders_assigned.append(builder)
+							builder.assign_to_build(buildingNode)
+							assigned_any = true
+					
+					if assigned_any:
 						register_construction_site(buildingNode)
-				
-				if !shift:
+					
+					if !shift:
+						_interface_input_mode = 0
+				else:
 					_interface_input_mode = 0
+			elif event.button_index == MOUSE_BUTTON_RIGHT:
+				_interface_input_mode = 0
 	else:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			if event.is_pressed():
@@ -513,3 +540,7 @@ func compute_cluster(count: int, cluster_center: Vector3, direction: Vector3, ri
 		var z_offset: float = row * spacing
 		positions.append(cluster_center - direction * z_offset + right * x_offset)
 	return positions
+
+func is_mouse_on_navbar() -> bool:
+	var hovered: Control = get_viewport().gui_get_hovered_control()
+	return hovered != null
