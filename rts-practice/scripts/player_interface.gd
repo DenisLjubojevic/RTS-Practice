@@ -13,7 +13,7 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var buildGrid: GridContainer = $UIRoot/NinePatchRect/Background/ActionPanel/buildGrid
 @onready var trainProgressBar: ProgressBar = $UIRoot/NinePatchRect/Background/ActionPanel/BuildingPanel/VBoxContainer/TrainUnitButton/ProgressBar
 @onready var visibleUnitsInArea: Dictionary =  {}
-@onready var constructionBarsLayer: Control = $UIRoot/NinePatchRect/ConstructionBarsLayer
+@onready var constructionBarsLayer: Control = $UIRoot/ConstructionBarsLayer
 @onready var formationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/VBoxContainer/formationButton
 @onready var formationPanel: PanelContainer = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel
 @onready var gridFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/GridFormationButton
@@ -77,6 +77,7 @@ func populate_build_menu() -> void:
 		var info: Dictionary = buildings_data[building_id]
 		var btn := TextureButton.new()
 		btn.texture_normal = load(info["ICON"])
+		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		btn.custom_minimum_size = Vector2(48, 48)
 		btn.pressed.connect(_on_building_option_pressed.bind(info["SCENE"]))
 		buildGrid.add_child(btn)
@@ -141,7 +142,7 @@ func _process(_delta: float) -> void:
 		
 		bar.value = progress
 		var screen_pos: Vector2 = camera.unproject_position(building.global_position + Vector3(0, building.get_bar_height_offset(), 0))
-		bar.position = screen_pos - bar.custom_minimum_size * 0.5
+		bar.global_position = screen_pos - bar.custom_minimum_size * 0.5
 	
 	for building in to_remove:
 		construction_sites.erase(building)
