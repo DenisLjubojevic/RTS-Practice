@@ -5,21 +5,64 @@
 [ext_resource type="Script" uid="uid://csixfdlo3tnmc" path="res://scripts/player_interface.gd" id="1_rwgxs"]
 [ext_resource type="PackedScene" uid="uid://doway2b3ln7gv" path="res://scenes/fog_of_war_texture.tscn" id="2_7r4gi"]
 [ext_resource type="MeshLibrary" uid="uid://cpestviqpnlf4" path="res://models/Terrain/tiles/tile_library.tres" id="3_k0juu"]
+[ext_resource type="Theme" uid="uid://bbcun5nh14kly" path="res://models/UI/ui_theme.tres" id="4_7t5mc"]
 [ext_resource type="Script" uid="uid://bmy1n01i4yw" path="res://scripts/minimap.gd" id="4_e3hyu"]
+[ext_resource type="Texture2D" uid="uid://backnl8saneh5" path="res://models/UI/BottomNavbar.png" id="4_jhx03"]
 [ext_resource type="ArrayMesh" uid="uid://deqecjknraxi0" path="res://models/turtleBuildings/turtleHQ.obj" id="5_71j4m"]
+[ext_resource type="Texture2D" uid="uid://b0hjhemxpbv2j" path="res://models/UI/wide_button_normal.png" id="5_dss4m"]
 [ext_resource type="Script" uid="uid://dwtkattlpevyw" path="res://scripts/buildingPlacement.gd" id="5_i7141"]
 [ext_resource type="Shader" uid="uid://ccx42yjdylgci" path="res://shaders/buildingPlacment.gdshader" id="5_qfnet"]
+[ext_resource type="Texture2D" uid="uid://cv4fw4p3tah11" path="res://models/UI/wide_button_pressed.png" id="6_7t5mc"]
+[ext_resource type="Texture2D" uid="uid://d4kdtgo7gcxdp" path="res://models/UI/wide_button_hovered.png" id="7_lakw3"]
 [ext_resource type="Shader" uid="uid://na62jio8mx4x" path="res://shaders/fog_of_war.gdshader" id="8_w7kh3"]
+[ext_resource type="Texture2D" uid="uid://coivs0wyoiar7" path="res://models/UI/grid_formattion.png" id="9_lakw3"]
+[ext_resource type="Texture2D" uid="uid://ci5y5d7ixx7sf" path="res://models/UI/split_formattion.png" id="10_pm21f"]
 [ext_resource type="PackedScene" uid="uid://de14mclc6k1rh" path="res://scenes/TurtleHQ.tscn" id="11_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://chqrksr3e2hx0" path="res://scenes/turtleBuilder.tscn" id="11_q5onr"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w7kh3"]
-bg_color = Color(0.4, 0.2328, 0.13599999, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.32052875, 0.15951297, 0.066317774, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jhx03"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pm21f"]
+texture = ExtResource("5_dss4m")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2lf6f"]
+texture = ExtResource("6_7t5mc")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7iits"]
+texture = ExtResource("7_lakw3")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dss4m"]
+texture = ExtResource("5_dss4m")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7t5mc"]
+texture = ExtResource("6_7t5mc")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lakw3"]
+texture = ExtResource("7_lakw3")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q5onr"]
 bg_color = Color(0.6573417, 0.71, 0.07810001, 1)
@@ -83,6 +126,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("4_7t5mc")
 
 [node name="ConstructionBarsLayer" type="Control" parent="Player_Interface/UIRoot" unique_id=550007164]
 layout_mode = 1
@@ -106,7 +150,13 @@ offset_right = 1152.0
 offset_bottom = 647.6201
 grow_horizontal = 2
 grow_vertical = 0
-region_rect = Rect2(624, 184, 8, 272)
+texture = ExtResource("4_jhx03")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
 
 [node name="Background" type="Panel" parent="Player_Interface/UIRoot/NinePatchRect" unique_id=636175048]
 layout_mode = 1
@@ -115,7 +165,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_w7kh3")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_jhx03")
 
 [node name="ActionPanel" type="HBoxContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background" unique_id=1477104593]
 layout_direction = 2
@@ -136,11 +186,21 @@ layout_mode = 2
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
-text = "Place building"
+theme_override_colors/font_color = Color(0.23368558, 0.3821536, 0.6514729, 0.95686275)
+theme_override_colors/font_hover_color = Color(0.1403994, 0.24545205, 0.44218257, 0.95686275)
+theme_override_styles/normal = SubResource("StyleBoxTexture_pm21f")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_2lf6f")
+theme_override_styles/hover = SubResource("StyleBoxTexture_7iits")
+text = "Place Building"
 
 [node name="formationButton" type="Button" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/VBoxContainer" unique_id=1493775569]
 visible = false
 layout_mode = 2
+theme_override_colors/font_color = Color(0.23529412, 0.38039216, 0.6509804, 0.95686275)
+theme_override_colors/font_hover_color = Color(0.14117648, 0.24705882, 0.44313726, 0.95686275)
+theme_override_styles/normal = SubResource("StyleBoxTexture_dss4m")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_7t5mc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_lakw3")
 text = "Formations"
 
 [node name="buildGrid" type="GridContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel" unique_id=1967888795]
@@ -180,21 +240,23 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_q5onr")
 max_value = 1.0
 show_percentage = false
 
-[node name="FormationPanel" type="PanelContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel" unique_id=1768344969]
+[node name="FormationContainer" type="GridContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel" unique_id=1919297026]
 visible = false
-custom_minimum_size = Vector2(820, 0)
 layout_mode = 2
+columns = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel" unique_id=187374388]
+[node name="GridFormationButton" type="Button" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer" unique_id=1638552663]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+tooltip_text = "Grid Formation"
+icon = ExtResource("9_lakw3")
+icon_alignment = 1
 
-[node name="GridFormationButton" type="Button" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer" unique_id=1638552663]
+[node name="SplitFormationButton" type="Button" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer" unique_id=908505068]
 layout_mode = 2
-text = "Grid"
-
-[node name="SplitFormationButton" type="Button" parent="Player_Interface/UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer" unique_id=908505068]
-layout_mode = 2
-text = "Split"
+tooltip_text = "Split Formation"
+icon = ExtResource("10_pm21f")
+icon_alignment = 1
 
 [node name="MinimapContainer" type="Panel" parent="Player_Interface/UIRoot/NinePatchRect/Background" unique_id=1262891748]
 custom_minimum_size = Vector2(130, 130)
@@ -202,37 +264,35 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 10.03
-offset_top = -139.96997
-offset_right = 144.0
-offset_bottom = -7.2948
+offset_left = 8.0
+offset_top = -142.00012
+offset_right = 143.0
+offset_bottom = -7.000122
 grow_vertical = 0
 script = ExtResource("4_e3hyu")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="Player_Interface/UIRoot/NinePatchRect/Background/MinimapContainer" unique_id=1764171689]
 layout_mode = 0
-offset_right = 133.97
-offset_bottom = 132.67517
+offset_right = 135.0
+offset_bottom = 135.0
 stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="Player_Interface/UIRoot/NinePatchRect/Background/MinimapContainer/SubViewportContainer" unique_id=1107827784]
 handle_input_locally = false
-size = Vector2i(133, 132)
+size = Vector2i(135, 135)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Player_Interface/UIRoot/NinePatchRect/Background/MinimapContainer/SubViewportContainer/SubViewport" unique_id=666502744]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 72.254654, 17.345116, 72.33275)
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 72.254654, 17.345116, 72.33275)
 rotation_edit_mode = 1
 projection = 1
-size = 143.43
+size = 142.0
 far = 21.43
 
 [node name="MinimapIcons" type="Control" parent="Player_Interface/UIRoot/NinePatchRect/Background/MinimapContainer" unique_id=76254752]
 anchors_preset = 0
-offset_left = -2.0299997
-offset_top = -1.3250122
-offset_right = 133.97
-offset_bottom = 132.67517
+offset_right = 135.0
+offset_bottom = 135.0
 
 [node name="camera_base" type="Node3D" parent="Player_Interface" unique_id=960262713]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.597073, 0, 32.919144)

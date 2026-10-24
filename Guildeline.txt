@@ -1,5 +1,12 @@
-Layers
+LAYERS
 Meele Units - 4
 Terrain - 2
 Buildings - 1
 
+UI IN ASEPRITE
+Izrada u ovim velicinama i export kao 300% png
+Navbar 48x50 => godot resize na pravilnu velicinu
+Wide Buttions 32x12
+Button (square) 16x16
+Icons (buildings to select) 16x16
+Resources 8x8

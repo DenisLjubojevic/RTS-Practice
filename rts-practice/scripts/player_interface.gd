@@ -15,9 +15,9 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var visibleUnitsInArea: Dictionary =  {}
 @onready var constructionBarsLayer: Control = $UIRoot/ConstructionBarsLayer
 @onready var formationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/VBoxContainer/formationButton
-@onready var formationPanel: PanelContainer = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel
-@onready var gridFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/GridFormationButton
-@onready var splitFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationPanel/HBoxContainer/SplitFormationButton
+@onready var formationContainer: GridContainer = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer
+@onready var gridFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer/GridFormationButton
+@onready var splitFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer/SplitFormationButton
 
 # Variables
 var selectedUnits: Array = []
@@ -65,29 +65,35 @@ func _ready() -> void:
 	buildingPlacmentButton.pressed.connect(_on_build_button_pressed)
 	populate_build_menu()
 	
-	formationPanel.hide()
+	formationContainer.hide()
 	formationButton.visible = false
 	formationButton.pressed.connect(_on_formation_button_pressed)
-	gridFormationButton.pressed.connect(func(): current_formation = "grid"; formationPanel.hide(); apply_formation_in_place())
-	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationPanel.hide(); apply_formation_in_place())
+	gridFormationButton.pressed.connect(func(): current_formation = "grid"; formationContainer.hide(); apply_formation_in_place())
+	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationContainer.hide(); apply_formation_in_place())
 
 func populate_build_menu() -> void:
 	var buildings_data: Dictionary = Globals.data["buildings"]
 	for building_id in buildings_data.keys():
 		var info: Dictionary = buildings_data[building_id]
-		var btn := TextureButton.new()
-		btn.texture_normal = load(info["ICON"])
-		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-		btn.custom_minimum_size = Vector2(48, 48)
+		var btn := make_icon_button(info["ICON"], str(info.get("NAME", "")))
 		btn.pressed.connect(_on_building_option_pressed.bind(info["SCENE"]))
 		buildGrid.add_child(btn)
 
+func make_icon_button(icon_path: String, tooltip: String) -> Button:
+	var btn := Button.new()
+	btn.icon = load(icon_path)
+	btn.custom_minimum_size = Vector2(48, 48)
+	btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	btn.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	btn.tooltip_text = tooltip
+	return btn
+
 func _on_build_button_pressed() -> void:
 	buildGrid.visible = not buildGrid.visible
-	formationPanel.visible = false
+	formationContainer.visible = false
 
 func _on_formation_button_pressed() -> void:
-	formationPanel.visible = not formationPanel.visible
+	formationContainer.visible = not formationContainer.visible
 	buildGrid.visible = false
 
 func _on_building_option_pressed(scene_path: String) -> void:
@@ -115,7 +121,7 @@ func update_selection_ui() -> void:
 	if not has_builder:
 		buildGrid.hide()
 	if selectedUnits.size() <= 1:
-		formationPanel.hide()
+		formationContainer.hide()
 
 func _on_building_deselected() -> void:
 	buildingPanel.hide()

@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://bbcun5nh14kly"]
+
+[ext_resource type="FontFile" uid="uid://de4pkev0dter7" path="res://fonts/Pixelify_Sans/PixelifySans-VariableFont_wght.ttf" id="1_vnwer"]
+
+[resource]
+default_font = ExtResource("1_vnwer")
+default_font_size = 16

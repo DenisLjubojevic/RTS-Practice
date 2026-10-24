@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpv2igbnhwfx0"
-path="res://.godot/imported/icon_building_turtlehq.png-41161342d24fe9ec05e3b5dfeea7be97.ctex"
+uid="uid://coivs0wyoiar7"
+path="res://.godot/imported/grid_formattion.png-22f2dee44492a09dcac560d6146c926d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://image/icons/icon_building_turtlehq.png"
-dest_files=["res://.godot/imported/icon_building_turtlehq.png-41161342d24fe9ec05e3b5dfeea7be97.ctex"]
+source_file="res://models/UI/grid_formattion.png"
+dest_files=["res://.godot/imported/grid_formattion.png-22f2dee44492a09dcac560d6146c926d.ctex"]
 
 [params]
 
