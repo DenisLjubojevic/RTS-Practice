@@ -2,6 +2,7 @@ LAYERS
 Meele Units - 4
 Terrain - 2
 Buildings - 1
+Enemy buildings - 3
 
 UI IN ASEPRITE
 Izrada u ovim velicinama i export kao 300% png

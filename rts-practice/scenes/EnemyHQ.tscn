@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://clpu1027ulp1i"]
+
+[ext_resource type="ArrayMesh" uid="uid://deqecjknraxi0" path="res://models/turtleBuildings/turtleHQ.obj" id="1_67c8h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6c674"]
+size = Vector3(3.2, 3, 3.2)
+
+[node name="EnemyHq" type="Node3D" unique_id=1358448225 groups=["Discoverable"]]
+
+[node name="TurtleHq" type="MeshInstance3D" parent="." unique_id=1049058411]
+mesh = ExtResource("1_67c8h")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1327324389]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=89059912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9604645e-08, 1.5, 5.9604645e-08)
+shape = SubResource("BoxShape3D_6c674")
