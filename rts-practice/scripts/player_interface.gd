@@ -18,6 +18,8 @@ const MODULE_CAMERA: GDScript = preload("res://scripts/moduleCamera.gd")
 @onready var formationContainer: GridContainer = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer
 @onready var gridFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer/GridFormationButton
 @onready var splitFormationButton: Button = $UIRoot/NinePatchRect/Background/ActionPanel/FormationContainer/SplitFormationButton
+@onready var pauseMenu: Control = %PauseMenu
+@onready var menuButton: Button = %MenuButton
 
 # Variables
 var selectedUnits: Array = []
@@ -70,6 +72,12 @@ func _ready() -> void:
 	formationButton.pressed.connect(_on_formation_button_pressed)
 	gridFormationButton.pressed.connect(func(): current_formation = "grid"; formationContainer.hide(); apply_formation_in_place())
 	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationContainer.hide(); apply_formation_in_place())
+	
+	menuButton.pressed.connect(open_pause_menu)
+
+func open_pause_menu() -> void:
+	_interface_input_mode = 0
+	pauseMenu.open()
 
 func populate_build_menu() -> void:
 	var buildings_data: Dictionary = Globals.data["buildings"]
@@ -282,12 +290,21 @@ func toggleSelectUnit(unit: Node3D) -> void:
 
 # detecting mouse left btn clicked
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
+		Globals.add_resource("wood", 5)
+	if event is InputEventKey and event.pressed and event.keycode == KEY_2:
+		Globals.add_resource("stone", 5)
+	if event is InputEventKey and event.pressed and event.keycode == KEY_3:
+		Globals.add_resource("food", 5)
+	
 	var shift: bool = Input.is_action_pressed("shift")
 	
 	if event.is_action_pressed("ui_cancel"):
 		if _interface_input_mode == 1:
 			_interface_input_mode = 0
-			get_viewport().set_input_as_handled()
+		else:
+			open_pause_menu()
+		get_viewport().set_input_as_handled()
 		return
 	
 	if event is InputEventKey:

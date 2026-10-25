@@ -13,13 +13,26 @@
 [ext_resource type="Script" uid="uid://dwtkattlpevyw" path="res://scripts/buildingPlacement.gd" id="5_i7141"]
 [ext_resource type="Shader" uid="uid://ccx42yjdylgci" path="res://shaders/buildingPlacment.gdshader" id="5_qfnet"]
 [ext_resource type="Texture2D" uid="uid://cv4fw4p3tah11" path="res://models/UI/wide_button_pressed.png" id="6_7t5mc"]
+[ext_resource type="Script" uid="uid://cjow0mt87t67t" path="res://scenes/top_bar.gd" id="6_kpybi"]
+[ext_resource type="Texture2D" uid="uid://drarsmcjo3dw5" path="res://models/UI/wood_icon.png" id="6_oo54l"]
+[ext_resource type="Texture2D" uid="uid://xw8qch3rm10c" path="res://models/UI/stone_icon.png" id="7_kpybi"]
 [ext_resource type="Texture2D" uid="uid://d4kdtgo7gcxdp" path="res://models/UI/wide_button_hovered.png" id="7_lakw3"]
 [ext_resource type="Shader" uid="uid://na62jio8mx4x" path="res://shaders/fog_of_war.gdshader" id="8_w7kh3"]
+[ext_resource type="Texture2D" uid="uid://da0o3jjhp64nl" path="res://models/UI/food_icon.png" id="9_ctatt"]
 [ext_resource type="Texture2D" uid="uid://coivs0wyoiar7" path="res://models/UI/grid_formattion.png" id="9_lakw3"]
+[ext_resource type="Texture2D" uid="uid://vcthaut3etvg" path="res://models/UI/menu_button.png" id="10_munwf"]
 [ext_resource type="Texture2D" uid="uid://ci5y5d7ixx7sf" path="res://models/UI/split_formattion.png" id="10_pm21f"]
 [ext_resource type="PackedScene" uid="uid://de14mclc6k1rh" path="res://scenes/TurtleHQ.tscn" id="11_e3hyu"]
 [ext_resource type="PackedScene" uid="uid://chqrksr3e2hx0" path="res://scenes/turtleBuilder.tscn" id="11_q5onr"]
+[ext_resource type="Script" uid="uid://cj1axvs78kqx7" path="res://scenes/pause_menu.gd" id="16_xgqkh"]
 [ext_resource type="PackedScene" uid="uid://clpu1027ulp1i" path="res://scenes/EnemyHQ.tscn" id="20_2lf6f"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_munwf"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+draw_center = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jhx03"]
 
@@ -129,6 +142,106 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("4_7t5mc")
+
+[node name="TopBar" type="NinePatchRect" parent="Player_Interface/UIRoot" unique_id=925249037]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 1152.0
+offset_bottom = 36.0
+grow_horizontal = 2
+mouse_filter = 0
+texture = ExtResource("4_jhx03")
+patch_margin_left = 12
+patch_margin_top = 12
+patch_margin_right = 12
+patch_margin_bottom = 12
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+script = ExtResource("6_kpybi")
+
+[node name="MarginContainer" type="MarginContainer" parent="Player_Interface/UIRoot/TopBar" unique_id=1185334399]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 36.0
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player_Interface/UIRoot/TopBar/MarginContainer" unique_id=611019192]
+layout_mode = 2
+
+[node name="ResourcesBox" type="HBoxContainer" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer" unique_id=1269360559]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="WoodItem" type="HBoxContainer" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox" unique_id=1805142415]
+layout_mode = 2
+
+[node name="WoodIcon" type="TextureRect" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/WoodItem" unique_id=581383080]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_oo54l")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WoodLabel" type="Label" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/WoodItem" unique_id=1090780156]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 24)
+layout_mode = 2
+vertical_alignment = 1
+
+[node name="StoneItem" type="HBoxContainer" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox" unique_id=1210191708]
+layout_mode = 2
+
+[node name="StoneIcon" type="TextureRect" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/StoneItem" unique_id=1286927654]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("7_kpybi")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StoneLabel" type="Label" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/StoneItem" unique_id=745284221]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+
+[node name="FodItem" type="HBoxContainer" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox" unique_id=1267331055]
+layout_mode = 2
+
+[node name="FoodIcon" type="TextureRect" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/FodItem" unique_id=959959525]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("9_ctatt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FoodLabel" type="Label" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer/ResourcesBox/FodItem" unique_id=1161372854]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer" unique_id=208036520]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer" unique_id=737372933]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Player_Interface/UIRoot/TopBar/MarginContainer/HBoxContainer" unique_id=150082408]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_munwf")
+icon = ExtResource("10_munwf")
+icon_alignment = 1
+expand_icon = true
 
 [node name="ConstructionBarsLayer" type="Control" parent="Player_Interface/UIRoot" unique_id=550007164]
 layout_mode = 1
@@ -295,6 +408,63 @@ far = 21.43
 anchors_preset = 0
 offset_right = 135.0
 offset_bottom = 135.0
+
+[node name="PauseMenu" type="Control" parent="Player_Interface/UIRoot" unique_id=237060514]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(1152, 0)
+layout_mode = 1
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("16_xgqkh")
+
+[node name="Dim" type="ColorRect" parent="Player_Interface/UIRoot/PauseMenu" unique_id=1868115757]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.49803922)
+
+[node name="CenterContainer" type="CenterContainer" parent="Player_Interface/UIRoot/PauseMenu" unique_id=79719619]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer" unique_id=487364395]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer/PanelContainer" unique_id=1160761927]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer/PanelContainer/MarginContainer" unique_id=1056505030]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=246100831]
+layout_mode = 2
+text = "MENU"
+horizontal_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=697779794]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Settings"
+
+[node name="LeaveButton" type="Button" parent="Player_Interface/UIRoot/PauseMenu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=12395556]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Leave Game"
 
 [node name="camera_base" type="Node3D" parent="Player_Interface" unique_id=960262713]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.597073, 0, 32.919144)
