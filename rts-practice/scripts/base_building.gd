@@ -9,6 +9,7 @@ extends Node3D
 @onready var model: Node3D = $Model
 @onready var selection_collision: CollisionShape3D = $Model/StaticBody3D/CollisionShape3D
 @onready var nav_obstacle: NavigationObstacle3D = $NavigationObstacle3D
+@export var accepts_resources: bool = false
 
 var construction_progress: float = 0.0
 var builders_assigned: Array = []
@@ -17,6 +18,9 @@ var construction_visual: Node3D = null
 func _ready() -> void:
 	if not is_in_group("Buildings"):
 		add_to_group("Buildings")
+	
+	if accepts_resources:
+		add_to_group("DropOffs")
 	
 	if not is_constructed:
 		model.hide()
@@ -41,7 +45,7 @@ func finish_construction() -> void:
 		construction_visual.queue_free()
 	for builder in builders_assigned:
 		if is_instance_valid(builder):
-			builder.stop_building()
+			builder.stop_building(self)
 	builders_assigned.clear()
 
 func get_construction_progress() -> float:

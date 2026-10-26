@@ -381,6 +381,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					if assigned_any:
 						return
 				
+				if try_assign_harvest(camera, mouse_pos):
+					return
+				
 				var cameraRaycastCords: Vector3 = MODULE_CAMERA.getVerctor3FromCameraRaycast(camera, mouse_pos)
 				if cameraRaycastCords != Vector3.ZERO:
 					var target_positions: Array = compute_formation_positions(selectedUnits, cameraRaycastCords)
@@ -568,3 +571,23 @@ func compute_cluster(count: int, cluster_center: Vector3, direction: Vector3, ri
 func is_mouse_on_navbar() -> bool:
 	var hovered: Control = get_viewport().gui_get_hovered_control()
 	return hovered != null
+
+func try_assign_harvest(camera: Camera3D, mouse_pos: Vector2) -> bool:
+	var ray_from: Vector3 = camera.project_ray_origin(mouse_pos)
+	var ray_to: Vector3 = ray_from + camera.project_ray_normal(mouse_pos) * 1000.0
+	var ray_param := PhysicsRayQueryParameters3D.create(ray_from, ray_to)
+	ray_param.collision_mask = 0b10000   # layer 5 = resources
+	var result: Dictionary = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
+	if result.is_empty():
+		return false
+	
+	var node = result.collider.owner
+	if not node is ResourceNode:
+		return false
+	
+	var assigned: bool = false
+	for unit in selectedUnits:
+		if unit is BuilderUnit:
+			unit.assign_to_harvest(node)
+			assigned = true
+	return assigned

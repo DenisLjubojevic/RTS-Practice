@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dwwq43v5b7i85"
+path="res://.godot/imported/bigTree.obj-a721ca56d77325f6ed6fe4de679f17b3.mesh"
+
+[deps]
+
+files=["res://.godot/imported/bigTree.obj-a721ca56d77325f6ed6fe4de679f17b3.mesh"]
+
+source_file="res://models/Terrain/Tress/bigTree.obj"
+dest_files=["res://.godot/imported/bigTree.obj-a721ca56d77325f6ed6fe4de679f17b3.mesh", "res://.godot/imported/bigTree.obj-a721ca56d77325f6ed6fe4de679f17b3.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

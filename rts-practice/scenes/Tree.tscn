@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://clpulfgjlvekg"]
+
+[ext_resource type="Script" uid="uid://b5ppac8tddstg" path="res://scenes/resource_node.gd" id="1_omb14"]
+[ext_resource type="ArrayMesh" uid="uid://dwwq43v5b7i85" path="res://models/Terrain/Tress/bigTree.obj" id="2_874r4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_omb14"]
+size = Vector3(0.4, 2.8, 0.4)
+
+[node name="Tree" type="Node3D" unique_id=656417917]
+script = ExtResource("1_omb14")
+
+[node name="BigTree" type="MeshInstance3D" parent="." unique_id=1507781020]
+mesh = ExtResource("2_874r4")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1698067034]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1274238772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4901161e-08, 1.3999999, 1.4901161e-08)
+shape = SubResource("BoxShape3D_omb14")
