@@ -68,7 +68,7 @@ func placementCheck(units: Dictionary, is_fow_visible: bool) -> bool:
 		i += 1
 	
 	for y_distance in y_distances:
-		if y_distance > 1:
+		if y_distance > 0.4:
 			return false
 	
 	model_green()

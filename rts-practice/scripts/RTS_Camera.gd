@@ -19,6 +19,11 @@ var camera_zoom_direction: int = 0
 @export_range(0, 32, 4) var camera_automatic_pan_margin: int = 16
 @export_range(0, 20, 0.5) var camera_automatic_pan_speed: float = 12
 
+@export var map_min: Vector2 = Vector2(0, 0)
+@export var map_max: Vector2 = Vector2(144, 144)
+@export var edge_margin_min: float = 6.0
+@export var edge_margin_per_zoom: float = 0.5
+
 # Flags
 var camera_can_process: bool = true
 var camera_can_move_base: bool = true
@@ -43,6 +48,7 @@ func _process(delta: float) -> void:
 	camera_zoom(delta)
 	camera_automatic_pan(delta)
 	camera_base_rotate(delta)
+	camera_clamp_simple()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("zoom_in"):
@@ -111,3 +117,10 @@ func camera_automatic_pan(delta: float) -> void:
 		if current_mouse_position.y > viewport_size.y / 2:
 			pan_direction.y = 1
 		translate(Vector3(0, 0, pan_direction.y * camera_automatic_pan_speed * zoom_factor * delta))
+
+func camera_clamp_simple() -> void:
+	var margin: float = edge_margin_min + camera.position.z * edge_margin_per_zoom
+	var p: Vector3 = global_position
+	p.x = clampf(p.x, map_min.x + margin, map_max.x - margin)
+	p.z = clampf(p.z, map_min.y + margin, map_max.y - margin)
+	global_position = p

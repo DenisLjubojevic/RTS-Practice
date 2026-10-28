@@ -1,13 +1,13 @@
 extends Node3D
 
-var world_size: Vector2i = Vector2i(142, 142) # IN meters / pixels
+var world_size: Vector2i = Vector2i(144, 144)
 
 @onready var FOW: Control = $FogOfWarTexture
 @onready var worldmap_mesh: MeshInstance3D = $fowMesh
 
 var dissolve_sprite: Texture2D = preload("res://image/fow_circle.png")
 var dim_overlay: StandardMaterial3D
-var remembered: Array = []
+var remembered: Dictionary = {}
 
 func _ready() -> void:
 	dim_overlay = StandardMaterial3D.new()
@@ -70,11 +70,15 @@ func reveal_discovered() -> void:
 		if is_position_visible_now(obj.global_position):
 			obj.show()
 			obj.remove_from_group("Discoverable")
-			remembered.append(obj)
-	
-	remembered = remembered.filter(func(o): return is_instance_valid(o))
+			remembered[obj] = false
 	
 	for obj in remembered:
-		var seen_now: bool = is_position_visible_now(obj.global_position)
+		if not is_instance_valid(obj):
+			remembered.erase(obj)
+			continue
+		var dim: bool = not is_position_visible_now(obj.global_position)
+		if remembered[obj] == dim:
+			continue
+		remembered[obj] = dim
 		for mesh in obj.find_children("*", "MeshInstance3D", true, false):
-			(mesh as MeshInstance3D).material_overlay = null if seen_now else dim_overlay 
+			(mesh as MeshInstance3D).material_overlay = dim_overlay if dim else null

@@ -576,7 +576,7 @@ func try_assign_harvest(camera: Camera3D, mouse_pos: Vector2) -> bool:
 	var ray_from: Vector3 = camera.project_ray_origin(mouse_pos)
 	var ray_to: Vector3 = ray_from + camera.project_ray_normal(mouse_pos) * 1000.0
 	var ray_param := PhysicsRayQueryParameters3D.create(ray_from, ray_to)
-	ray_param.collision_mask = 0b10000   # layer 5 = resources
+	ray_param.collision_mask = 0b100000
 	var result: Dictionary = camera.get_world_3d().get_direct_space_state().intersect_ray(ray_param)
 	if result.is_empty():
 		return false

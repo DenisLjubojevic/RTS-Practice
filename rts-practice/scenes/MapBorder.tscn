@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://i5sjj2dkj84n"]
+
+[ext_resource type="Script" uid="uid://df6x5ojxgmou8" path="res://scenes/map_border.gd" id="1_jo4f4"]
+
+[node name="MapBorder" type="Node3D" unique_id=869571111]
+script = ExtResource("1_jo4f4")
