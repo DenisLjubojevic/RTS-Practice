@@ -3,7 +3,10 @@ extends Node3D
 var world_size: Vector2i = Vector2i(144, 144)
 
 @onready var FOW: Control = $FogOfWarTexture
-@onready var worldmap_mesh: MeshInstance3D = $fowMesh
+
+const FOG_SHADER: Shader = preload("res://shaders/fow_terrain.gdshader")
+@onready var terrain: GridMap = $NavigationRegion3D/GridMap
+var fog_material: ShaderMaterial
 
 var dissolve_sprite: Texture2D = preload("res://image/fow_circle.png")
 var dim_overlay: StandardMaterial3D
@@ -17,9 +20,13 @@ func _ready() -> void:
 	
 	FOW.new_fog_of_war(Rect2(Vector2.ZERO, world_size))
 	
-	var fow_matterial: ShaderMaterial = worldmap_mesh.get_material_override() as ShaderMaterial
-	fow_matterial.set_shader_parameter("memory_texture", FOW.fog_of_war_main_texture)
-	fow_matterial.set_shader_parameter("visible_texture", FOW.fog_of_war_current_texture)
+	fog_material = ShaderMaterial.new()
+	fog_material.shader = FOG_SHADER
+	fog_material.set_shader_parameter("memory_texture", FOW.fog_of_war_main_texture)
+	fog_material.set_shader_parameter("visible_texture", FOW.fog_of_war_current_texture)
+	fog_material.set_shader_parameter("map_size", Vector2(world_size))
+	fog_material.set_shader_parameter("explored_brightness", 0.4)
+	apply_fog_to_terrain()
 	
 	for unit in get_tree().get_nodes_in_group("Units"):
 		register_unit(unit)
@@ -34,6 +41,19 @@ func _ready() -> void:
 	
 	for dynamic_object in $dynamic_objects.get_children():
 		dynamic_object.hide()
+
+func apply_fog_to_terrain() -> void:
+	var library: MeshLibrary = terrain.mesh_library
+	for id in library.get_item_list():
+		var mesh: Mesh = library.get_item_mesh(id)
+		if mesh == null:
+			continue
+		for s in mesh.get_surface_count():
+			var mat: Material = mesh.surface_get_material(s)
+			if mat == null:
+				push_warning("tile %d surface %d has no material, fog not applied" % [id, s])
+				continue
+			mat.next_pass = fog_material
 
 func register_unit(unit: Node3D, vision_size: int = 32) -> void:
 	add_to_fow(unit, vision_size)
