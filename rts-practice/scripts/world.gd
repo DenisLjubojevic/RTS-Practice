@@ -38,9 +38,6 @@ func _ready() -> void:
 		obj.hide()
 	
 	FOW.fow_updated.connect(reveal_discovered)
-	
-	for dynamic_object in $dynamic_objects.get_children():
-		dynamic_object.hide()
 
 func apply_fog_to_terrain() -> void:
 	var library: MeshLibrary = terrain.mesh_library
