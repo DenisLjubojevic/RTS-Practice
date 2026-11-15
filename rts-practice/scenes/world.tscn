@@ -21,7 +21,6 @@
 [ext_resource type="Texture2D" uid="uid://drarsmcjo3dw5" path="res://models/UI/wood_icon.png" id="6_oo54l"]
 [ext_resource type="Texture2D" uid="uid://xw8qch3rm10c" path="res://models/UI/stone_icon.png" id="7_kpybi"]
 [ext_resource type="Texture2D" uid="uid://d4kdtgo7gcxdp" path="res://models/UI/wide_button_hovered.png" id="7_lakw3"]
-[ext_resource type="Script" uid="uid://b5ppac8tddstg" path="res://scenes/resource_node.gd" id="7_luhhm"]
 [ext_resource type="Texture2D" uid="uid://da0o3jjhp64nl" path="res://models/UI/food_icon.png" id="9_ctatt"]
 [ext_resource type="Texture2D" uid="uid://coivs0wyoiar7" path="res://models/UI/grid_formattion.png" id="9_lakw3"]
 [ext_resource type="Texture2D" uid="uid://vcthaut3etvg" path="res://models/UI/menu_button.png" id="10_munwf"]
@@ -1368,61 +1367,47 @@ count = 14
 min_spacing = 0.645
 seed_value = 10
 
-[node name="Tree" type="Node3D" parent="ForestPatch2" unique_id=656417917 instance=ExtResource("27_ts3gi")]
+[node name="Tree" parent="ForestPatch2" unique_id=656417917 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0558845, 0, 0, 0, 1.0558845, 0, 0, 0, 1.0558845, -2.3873596, 0, -3.1623042)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54396" type="Node3D" parent="ForestPatch2" unique_id=1335540807 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54396" parent="ForestPatch2" unique_id=1335540807 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0693579, 0, 0, 0, 1.0693579, 0, 0, 0, 1.0693579, 3.3662138, 0, 0.2754084)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54397" type="Node3D" parent="ForestPatch2" unique_id=1021816948 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54397" parent="ForestPatch2" unique_id=1021816948 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0801646, 0, 0, 0, 1.0801646, 0, 0, 0, 1.0801646, -0.5926368, 0, 2.0409913)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54398" type="Node3D" parent="ForestPatch2" unique_id=212577498 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54398" parent="ForestPatch2" unique_id=212577498 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9936541, 0, 0, 0, 0.9936541, 0, 0, 0, 0.9936541, 0.5749774, 0, -0.18906169)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54399" type="Node3D" parent="ForestPatch2" unique_id=1048330016 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54399" parent="ForestPatch2" unique_id=1048330016 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0907426, 0, 0, 0, 1.0907426, 0, 0, 0, 1.0907426, 1.0788306, 0, -2.4615538)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54400" type="Node3D" parent="ForestPatch2" unique_id=533833632 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54400" parent="ForestPatch2" unique_id=533833632 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.99611413, 0, 0, 0, 0.99611413, 0, 0, 0, 0.99611413, -0.3453636, 0, -0.29712898)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54401" type="Node3D" parent="ForestPatch2" unique_id=1061344883 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54401" parent="ForestPatch2" unique_id=1061344883 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.096529, 0, 0, 0, 1.096529, 0, 0, 0, 1.096529, 0.5575403, 0, -1.6762441)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54402" type="Node3D" parent="ForestPatch2" unique_id=457947163 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54402" parent="ForestPatch2" unique_id=457947163 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.029409, 0, 0, 0, 1.029409, 0, 0, 0, 1.029409, -1.6489543, 0, 0.51957136)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54403" type="Node3D" parent="ForestPatch2" unique_id=1009741700 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54403" parent="ForestPatch2" unique_id=1009741700 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.98228157, 0, 0, 0, 0.98228157, 0, 0, 0, 0.98228157, 3.637858, 0, -0.4604275)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54404" type="Node3D" parent="ForestPatch2" unique_id=622845406 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54404" parent="ForestPatch2" unique_id=622845406 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0034707, 0, 0, 0, 1.0034707, 0, 0, 0, 1.0034707, -0.3128903, 0, 2.6365018)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54405" type="Node3D" parent="ForestPatch2" unique_id=1976472633 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54405" parent="ForestPatch2" unique_id=1976472633 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0533675, 0, 0, 0, 1.0533675, 0, 0, 0, 1.0533675, -1.8527226, 0, -2.4114764)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54406" type="Node3D" parent="ForestPatch2" unique_id=852870588 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54406" parent="ForestPatch2" unique_id=852870588 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9866319, 0, 0, 0, 0.9866319, 0, 0, 0, 0.9866319, 1.3608528, 0, 1.6146849)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54407" type="Node3D" parent="ForestPatch2" unique_id=1909931142 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54407" parent="ForestPatch2" unique_id=1909931142 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0354766, 0, 0, 0, 1.0354766, 0, 0, 0, 1.0354766, -0.89703345, 0, 1.1444093)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54408" type="Node3D" parent="ForestPatch2" unique_id=960359492 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54408" parent="ForestPatch2" unique_id=960359492 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0697399, 0, 0, 0, 1.0697399, 0, 0, 0, 1.0697399, 2.9598284, 0, 1.3167671)
-script = ExtResource("7_luhhm")
 
 [node name="ForestPatch3" type="Node3D" parent="." unique_id=419613021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0.2, 12)
@@ -1433,61 +1418,47 @@ count = 14
 min_spacing = 0.645
 seed_value = 11
 
-[node name="Tree" type="Node3D" parent="ForestPatch3" unique_id=1506092388 instance=ExtResource("27_ts3gi")]
+[node name="Tree" parent="ForestPatch3" unique_id=1506092388 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.99427015, 0, 0, 0, 0.99427015, 0, 0, 0, 0.99427015, 1.1854475, 0, -2.269175)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54646" type="Node3D" parent="ForestPatch3" unique_id=1322264527 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54646" parent="ForestPatch3" unique_id=1322264527 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0216211, 0, 0, 0, 1.0216211, 0, 0, 0, 1.0216211, 1.2176563, 0, 0.15879731)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54647" type="Node3D" parent="ForestPatch3" unique_id=249059601 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54647" parent="ForestPatch3" unique_id=249059601 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.067346, 0, 0, 0, 1.067346, 0, 0, 0, 1.067346, 1.5954454, 0, -2.827772)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54648" type="Node3D" parent="ForestPatch3" unique_id=1860470515 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54648" parent="ForestPatch3" unique_id=1860470515 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.99489415, 0, 0, 0, 0.99489415, 0, 0, 0, 0.99489415, -2.1310506, 0, -0.6311506)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54649" type="Node3D" parent="ForestPatch3" unique_id=1002225330 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54649" parent="ForestPatch3" unique_id=1002225330 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0644405, 0, 0, 0, 1.0644405, 0, 0, 0, 1.0644405, 2.3561985, 0, -2.5482922)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54650" type="Node3D" parent="ForestPatch3" unique_id=2057183578 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54650" parent="ForestPatch3" unique_id=2057183578 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9721183, 0, 0, 0, 0.9721183, 0, 0, 0, 0.9721183, 1.26868, 0, 2.6099484)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54651" type="Node3D" parent="ForestPatch3" unique_id=465241349 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54651" parent="ForestPatch3" unique_id=465241349 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0875146, 0, 0, 0, 1.0875146, 0, 0, 0, 1.0875146, 2.611857, 0, 2.8963952)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54652" type="Node3D" parent="ForestPatch3" unique_id=2017053228 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54652" parent="ForestPatch3" unique_id=2017053228 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0951486, 0, 0, 0, 1.0951486, 0, 0, 0, 1.0951486, 0.3855184, 0, 3.364248)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54653" type="Node3D" parent="ForestPatch3" unique_id=979696212 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54653" parent="ForestPatch3" unique_id=979696212 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9588546, 0, 0, 0, 0.9588546, 0, 0, 0, 0.9588546, -1.3738048, 0, 3.1346738)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54654" type="Node3D" parent="ForestPatch3" unique_id=1071737024 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54654" parent="ForestPatch3" unique_id=1071737024 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9761356, 0, 0, 0, 0.9761356, 0, 0, 0, 0.9761356, -0.96432424, 0, 1.3337783)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54655" type="Node3D" parent="ForestPatch3" unique_id=794826046 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54655" parent="ForestPatch3" unique_id=794826046 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0280735, 0, 0, 0, 1.0280735, 0, 0, 0, 1.0280735, 0.100989304, 0, -1.8068701)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54656" type="Node3D" parent="ForestPatch3" unique_id=842823885 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54656" parent="ForestPatch3" unique_id=842823885 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9921545, 0, 0, 0, 0.9921545, 0, 0, 0, 0.9921545, -1.6771692, 0, 1.3280073)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54657" type="Node3D" parent="ForestPatch3" unique_id=470347796 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54657" parent="ForestPatch3" unique_id=470347796 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9895524, 0, 0, 0, 0.9895524, 0, 0, 0, 0.9895524, -0.97436243, 0, 0.55232626)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54658" type="Node3D" parent="ForestPatch3" unique_id=224773904 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54658" parent="ForestPatch3" unique_id=224773904 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.99571794, 0, 0, 0, 0.99571794, 0, 0, 0, 0.99571794, -2.3739126, 0, -1.5243418)
-script = ExtResource("7_luhhm")
 
 [node name="ForestPatch4" type="Node3D" parent="." unique_id=534631270]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0.2, 27)
@@ -1498,61 +1469,47 @@ count = 14
 min_spacing = 0.645
 seed_value = 8
 
-[node name="Tree" type="Node3D" parent="ForestPatch4" unique_id=1695809908 instance=ExtResource("27_ts3gi")]
+[node name="Tree" parent="ForestPatch4" unique_id=1695809908 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9843636, 0, 0, 0, 0.9843636, 0, 0, 0, 0.9843636, -2.7746644, 0, 1.4655511)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54896" type="Node3D" parent="ForestPatch4" unique_id=907216308 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54896" parent="ForestPatch4" unique_id=907216308 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0687622, 0, 0, 0, 1.0687622, 0, 0, 0, 1.0687622, 1.6007733, 0, 2.5425208)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54897" type="Node3D" parent="ForestPatch4" unique_id=1724781590 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54897" parent="ForestPatch4" unique_id=1724781590 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0913342, 0, 0, 0, 1.0913342, 0, 0, 0, 1.0913342, 1.7632326, 0, -2.6956985)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54898" type="Node3D" parent="ForestPatch4" unique_id=1009475381 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54898" parent="ForestPatch4" unique_id=1009475381 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9627715, 0, 0, 0, 0.9627715, 0, 0, 0, 0.9627715, -2.2476623, 0, 1.9071571)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54899" type="Node3D" parent="ForestPatch4" unique_id=1816053939 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54899" parent="ForestPatch4" unique_id=1816053939 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0071926, 0, 0, 0, 1.0071926, 0, 0, 0, 1.0071926, 0.9073171, 0, -3.8447163)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54900" type="Node3D" parent="ForestPatch4" unique_id=63193780 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54900" parent="ForestPatch4" unique_id=63193780 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0230862, 0, 0, 0, 1.0230862, 0, 0, 0, 1.0230862, -0.53727436, 0, -0.58110636)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54901" type="Node3D" parent="ForestPatch4" unique_id=699243183 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54901" parent="ForestPatch4" unique_id=699243183 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9709132, 0, 0, 0, 0.9709132, 0, 0, 0, 0.9709132, 3.5453806, 0, -1.4723388)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54902" type="Node3D" parent="ForestPatch4" unique_id=826816891 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54902" parent="ForestPatch4" unique_id=826816891 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9701278, 0, 0, 0, 0.9701278, 0, 0, 0, 0.9701278, 1.1376368, 0, 0.7143933)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54903" type="Node3D" parent="ForestPatch4" unique_id=66184853 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54903" parent="ForestPatch4" unique_id=66184853 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.96880233, 0, 0, 0, 0.96880233, 0, 0, 0, 0.96880233, 2.4685504, 0, 3.1044695)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54904" type="Node3D" parent="ForestPatch4" unique_id=1580701956 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54904" parent="ForestPatch4" unique_id=1580701956 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9649071, 0, 0, 0, 0.9649071, 0, 0, 0, 0.9649071, 2.9942405, 0, 2.3767362)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54905" type="Node3D" parent="ForestPatch4" unique_id=120742064 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54905" parent="ForestPatch4" unique_id=120742064 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.0204033, 0, 0, 0, 1.0204033, 0, 0, 0, 1.0204033, -1.8073066, 0, 0.18309908)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54906" type="Node3D" parent="ForestPatch4" unique_id=587906951 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54906" parent="ForestPatch4" unique_id=587906951 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(1.075102, 0, 0, 0, 1.075102, 0, 0, 0, 1.075102, -1.1097491, 0, 0.7135963)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54907" type="Node3D" parent="ForestPatch4" unique_id=780425246 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54907" parent="ForestPatch4" unique_id=780425246 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9600591, 0, 0, 0, 0.9600591, 0, 0, 0, 0.9600591, 2.6193922, 0, 0.2713906)
-script = ExtResource("7_luhhm")
 
-[node name="@Node3D@54908" type="Node3D" parent="ForestPatch4" unique_id=614040635 instance=ExtResource("27_ts3gi")]
+[node name="@Node3D@54908" parent="ForestPatch4" unique_id=614040635 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9789703, 0, 0, 0, 0.9789703, 0, 0, 0, 0.9789703, 2.616361, 0, -1.3270613)
-script = ExtResource("7_luhhm")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=473008752]
 navigation_mesh = SubResource("NavigationMesh_k0juu")
