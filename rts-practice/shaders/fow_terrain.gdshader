@@ -13,7 +13,7 @@ void vertex() {
 }
 
 void fragment() {
-	vec2 uv = world_pos.xz / map_size;
+	vec2 uv = clamp(world_pos.xz / map_size, vec2(0.0), vec2(1.0));
 	float explored = texture(memory_texture, uv).r;
 	float vis = texture(visible_texture, uv).r;
 	float level = max(vis, explored * explored_brightness);

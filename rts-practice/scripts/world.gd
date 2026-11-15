@@ -26,6 +26,17 @@ func _ready() -> void:
 	fog_material.set_shader_parameter("visible_texture", FOW.fog_of_war_current_texture)
 	fog_material.set_shader_parameter("map_size", Vector2(world_size))
 	fog_material.set_shader_parameter("explored_brightness", 0.4)
+	
+	for border_name in ["TreeBorder"]:
+		var border: Node = get_node_or_null(border_name)
+		if border == null:
+			continue
+		for child in border.get_children():
+			if child is MultiMeshInstance3D:
+				(child as MultiMeshInstance3D).material_overlay = fog_material
+		var ground: MeshInstance3D = get_node_or_null("BorderGround") as MeshInstance3D
+		if ground != null:
+			ground.material_overlay = fog_material
 	apply_fog_to_terrain()
 	
 	for unit in get_tree().get_nodes_in_group("Units"):
