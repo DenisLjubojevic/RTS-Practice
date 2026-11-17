@@ -290,13 +290,6 @@ func toggleSelectUnit(unit: Node3D) -> void:
 
 # detecting mouse left btn clicked
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_1:
-		Globals.add_resource("wood", 5)
-	if event is InputEventKey and event.pressed and event.keycode == KEY_2:
-		Globals.add_resource("stone", 5)
-	if event is InputEventKey and event.pressed and event.keycode == KEY_3:
-		Globals.add_resource("food", 5)
-	
 	var shift: bool = Input.is_action_pressed("shift")
 	
 	if event.is_action_pressed("ui_cancel"):

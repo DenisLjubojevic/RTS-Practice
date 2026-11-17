@@ -6,6 +6,7 @@ var rotationFast: bool = true
 var stuckMax : int = 9
 var stuckCount: int = 0
 var lastPosition: Vector3
+var work_animation: String = ""
 
 @onready var selection_circle: MeshInstance3D = $SelectionCircle
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
@@ -36,7 +37,7 @@ func _ready() -> void:
 # updates velocity of agent so he knows where to move
 func _physics_process(delta: float) -> void:
 	if navigation_agent.is_navigation_finished():
-		animPlayer.play("Idle")
+		animPlayer.play(work_animation if work_animation != "" else "Idle")
 		return
 	
 	if Engine.get_physics_frames() % 3 == 0:

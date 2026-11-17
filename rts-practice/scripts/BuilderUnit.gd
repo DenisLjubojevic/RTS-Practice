@@ -6,6 +6,7 @@ enum Task { NONE, BUILD, HARVEST, DELIVER }
 @export var build_power: float = 10.0
 @export var harvest_rate: float = 2.0
 @export var carry_capacity: int = 10
+@export var axe: Node3D
 
 var task: Task = Task.NONE
 var build_target: Node3D = null
@@ -36,6 +37,12 @@ func clear_task() -> void:
 	dropoff_target = null
 	_gather_buffer = 0.0
 	navigation_agent.target_desired_distance = _default_desired_distance
+	set_work("", false)
+
+func set_work(anim: String, tool_visible: bool) -> void:
+	work_animation = anim
+	if axe != null:
+		axe.visible = tool_visible
 
 func assign_to_build(building: Node3D) -> void:
 	clear_task()
@@ -63,6 +70,7 @@ func assign_to_harvest(resource: ResourceNode) -> void:
 		go_to_resource(resource)
 
 func start_delivery() -> void:
+	set_work("", false)
 	dropoff_target = find_dropoff()
 	if dropoff_target == null:
 		clear_task()
@@ -106,11 +114,14 @@ func process_build(delta: float) -> void:
 
 func process_harvest(delta: float) -> void:
 	if not is_instance_valid(harvest_target) or harvest_target.amount <= 0:
+		set_work("", false)
 		on_harvest_target_lost()
 		return
 	if global_position.distance_to(harvest_target.global_position) > harvest_target.get_interaction_range():
+		set_work("", false)
 		return
 	
+	set_work("Chop", true)
 	_gather_buffer += harvest_rate * delta
 	var whole: int = int(_gather_buffer)
 	if whole <= 0:
@@ -141,17 +152,9 @@ func find_nearby_resource(type: String, search_radius: float = 15.0) -> Resource
 			best = res
 	return best
 
-func _start_delivery() -> void:
-	dropoff_target = find_dropoff()
-	if dropoff_target == null:
-		clear_task()
-		return
-	task = Task.DELIVER
-	go_to(dropoff_target.global_position, dropoff_target.get_interaction_range())
-
 func process_delivery() -> void:
 	if not is_instance_valid(dropoff_target):
-		_start_delivery()
+		start_delivery()
 		return
 	if global_position.distance_to(dropoff_target.global_position) > dropoff_target.get_interaction_range():
 		return

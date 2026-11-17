@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://chqrksr3e2hx0"]
 
 [ext_resource type="Script" uid="uid://ca2gqqxton4hd" path="res://scripts/BuilderUnit.gd" id="1_nsf8y"]
-[ext_resource type="ArrayMesh" uid="uid://b1jrddtt5sgbb" path="res://models/Turtle/firstUnit.obj" id="2_sww1v"]
+[ext_resource type="ArrayMesh" uid="uid://dc3prupay1o3y" path="res://models/Turtle/Axe.obj" id="3_o5gy7"]
+[ext_resource type="PackedScene" uid="uid://bl06nfp4t7buc" path="res://models/Turtle/TurtleBuilder.glb" id="3_sww1v"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_knrx7"]
 radius = 0.2
@@ -15,6 +16,59 @@ albedo_color = Color(0, 0.28086498, 0.6946441, 1)
 [sub_resource type="CylinderMesh" id="CylinderMesh_knrx7"]
 material = SubResource("StandardMaterial3D_x353t")
 height = 0.05
+
+[sub_resource type="Animation" id="Animation_o5gy7"]
+resource_name = "Chop"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../TurtleBuilder/LeftArm:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.1, 1.1, 0.39999992), Vector3(-0.1, 1.1, 0.39999992), Vector3(-0.1, 1.1, 0.39999992), Vector3(-0.1, 1.1, 0.39999992)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../TurtleBuilder/Axe:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.25, 0.525, 0.485), Vector3(0.195, 0.525, 0.485), Vector3(0.44888893, 1.525, 0.485), Vector3(0.51, 0.87, 0.485)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../TurtleBuilder/Axe:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5707964, 1.5707964, 0), Vector3(0.78539824, 1.5707964, -4.3711392e-08), Vector3(-0.78539824, 1.5707964, -1.05528635e-07), Vector3(0.26179934, 1.5707964, -4.371139e-08)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TurtleBuilder/LeftArm:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1.5707964, 0, 0), Vector3(0.78539824, 1.5707964, 1.5707964), Vector3(-0.7853981, 1.5707964, 1.5707963), Vector3(0.26179945, 1.5707964, 1.5707964)]
+}
 
 [sub_resource type="Animation" id="Animation_knrx7"]
 resource_name = "Idle"
@@ -47,6 +101,54 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../TurtleBuilder/LeftArm:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.1, 1.1, 0.39999992)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../TurtleBuilder/Axe:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.25, 0.525, 0.485)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../TurtleBuilder/Axe:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.78539824, 1.5707964, -4.3711392e-08)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../TurtleBuilder/LeftArm:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.78539824, 1.5707964, 1.5707964)]
+}
 
 [sub_resource type="Animation" id="Animation_c6cqp"]
 resource_name = "walk"
@@ -67,6 +169,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ljfw1"]
 _data = {
+&"Chop": SubResource("Animation_o5gy7"),
 &"Idle": SubResource("Animation_knrx7"),
 &"RESET": SubResource("Animation_o6j3i"),
 &"walk": SubResource("Animation_c6cqp")
@@ -75,11 +178,12 @@ _data = {
 [sub_resource type="SphereShape3D" id="SphereShape3D_o6j3i"]
 radius = 10.0
 
-[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324]
+[node name="CharacterBody3D" type="CharacterBody3D" unique_id=1975172324 node_paths=PackedStringArray("axe")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 collision_layer = 8
 collision_mask = 53
 script = ExtResource("1_nsf8y")
+axe = NodePath("TurtleBuilder/Axe")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=334519099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
@@ -98,12 +202,19 @@ max_speed = 4.0
 wait_time = 1.1
 autostart = true
 
-[node name="FirstUnit" type="MeshInstance3D" parent="." unique_id=1665636687]
+[node name="TurtleBuilder" parent="." unique_id=601170175 instance=ExtResource("3_sww1v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 0, 0)
-mesh = ExtResource("2_sww1v")
+
+[node name="LeftArm" parent="TurtleBuilder" index="1" unique_id=1676294925]
+transform = Transform3D(0.7071067, 1.2802769e-08, 0.7071066, 0.7071066, -3.0908616e-08, -0.7071067, 1.2802766e-08, 1, -3.090861e-08, -0.1, 1.1, 0.39999992)
+
+[node name="Axe" type="MeshInstance3D" parent="TurtleBuilder" unique_id=1572947873]
+transform = Transform3D(-3.7310006e-08, 0.35355332, 0.35355327, -1.545431e-08, 0.35355327, -0.35355332, -0.5, -3.7309995e-08, -1.5454305e-08, -0.25, 0.525, 0.485)
+visible = false
+mesh = ExtResource("3_o5gy7")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=533083994]
-root_node = NodePath("../FirstUnit")
+root_node = NodePath("../TurtleBuilder")
 libraries/ = SubResource("AnimationLibrary_ljfw1")
 speed_scale = 1.5
 
@@ -118,3 +229,5 @@ collision_layer = 8
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VisionArea3D" unique_id=669590468]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 shape = SubResource("SphereShape3D_o6j3i")
+
+[editable path="TurtleBuilder"]

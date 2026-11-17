@@ -1931,13 +1931,13 @@ transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, -18.
 building_type = "TurtleHQ"
 is_constructed = true
 
-[node name="StartingTurtleBuilder4" parent="Units" unique_id=1878302360 groups=["Units"] instance=ExtResource("11_q5onr")]
+[node name="StartingTurtleBuilder4" parent="Units" unique_id=1975172324 groups=["Units"] instance=ExtResource("11_q5onr")]
 transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, -20, 0.2, -16.7)
 
-[node name="StartingTurtleBuilder5" parent="Units" unique_id=1742236564 groups=["Units"] instance=ExtResource("11_q5onr")]
+[node name="StartingTurtleBuilder5" parent="Units" unique_id=769114105 groups=["Units"] instance=ExtResource("11_q5onr")]
 transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, -18, 0.2, -16)
 
-[node name="StartingTurtleBuilder6" parent="Units" unique_id=819398549 groups=["Units"] instance=ExtResource("11_q5onr")]
+[node name="StartingTurtleBuilder6" parent="Units" unique_id=1586036450 groups=["Units"] instance=ExtResource("11_q5onr")]
 transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, -19, 0.2, -18)
 
 [node name="EnemyHQ" parent="." unique_id=1358448225 instance=ExtResource("20_2lf6f")]
