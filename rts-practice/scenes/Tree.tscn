@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://clpulfgjlvekg"]
 
 [ext_resource type="Script" uid="uid://b5ppac8tddstg" path="res://scripts/resource_node.gd" id="1_omb14"]
-[ext_resource type="ArrayMesh" uid="uid://dwwq43v5b7i85" path="res://models/Terrain/Tress/bigTree.obj" id="2_874r4"]
+[ext_resource type="ArrayMesh" uid="uid://dwwq43v5b7i85" path="res://models/Terrain/Resources/bigTree.obj" id="2_874r4"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_omb14"]
 size = Vector3(0.4, 2.8, 0.4)
 
 [node name="Tree" type="Node3D" unique_id=656417917]
 script = ExtResource("1_omb14")
+amount = 50
 
 [node name="BigTree" type="MeshInstance3D" parent="." unique_id=1507781020]
 mesh = ExtResource("2_874r4")

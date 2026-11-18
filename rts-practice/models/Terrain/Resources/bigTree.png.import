@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bevgoc1qvdjku"
-path.s3tc="res://.godot/imported/smallTree.png-618652435313222d56c6e34dca05db00.s3tc.ctex"
+uid="uid://qf3lifshdvyk"
+path.s3tc="res://.godot/imported/bigTree.png-89f9b84c3dc582e33f15c7d2a7cdef8b.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://models/Terrain/Tress/smallTree.png"
-dest_files=["res://.godot/imported/smallTree.png-618652435313222d56c6e34dca05db00.s3tc.ctex"]
+source_file="res://models/Terrain/Resources/bigTree.png"
+dest_files=["res://.godot/imported/bigTree.png-89f9b84c3dc582e33f15c7d2a7cdef8b.s3tc.ctex"]
 
 [params]
 

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://pp6m1b8jtcag"]
+
+[ext_resource type="ArrayMesh" uid="uid://5maamp2q3qui" path="res://models/Terrain/Resources/stone.obj" id="1_i5bm8"]
+[ext_resource type="Script" uid="uid://b5ppac8tddstg" path="res://scripts/resource_node.gd" id="1_m47l4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m47l4"]
+size = Vector3(0.8, 0.5, 0.8)
+
+[node name="Stone" type="Node3D" unique_id=2081661951]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+script = ExtResource("1_m47l4")
+resource_type = "stone"
+amount = 120
+
+[node name="Stone" type="MeshInstance3D" parent="." unique_id=2070084207]
+mesh = ExtResource("1_i5bm8")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=999378526]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=174751660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9802322e-08, 0.25, 2.9802322e-08)
+shape = SubResource("BoxShape3D_m47l4")

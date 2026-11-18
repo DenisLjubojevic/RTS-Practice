@@ -17,13 +17,14 @@
 [ext_resource type="Texture2D" uid="uid://cv4fw4p3tah11" path="res://models/UI/wide_button_pressed.png" id="6_7t5mc"]
 [ext_resource type="Script" uid="uid://d37b6rukv724d" path="res://scripts/forest_patch.gd" id="6_fh13f"]
 [ext_resource type="Script" uid="uid://cjow0mt87t67t" path="res://scripts/top_bar.gd" id="6_kpybi"]
-[ext_resource type="ArrayMesh" uid="uid://dwwq43v5b7i85" path="res://models/Terrain/Tress/bigTree.obj" id="6_luhhm"]
+[ext_resource type="ArrayMesh" uid="uid://dwwq43v5b7i85" path="res://models/Terrain/Resources/bigTree.obj" id="6_luhhm"]
 [ext_resource type="Texture2D" uid="uid://drarsmcjo3dw5" path="res://models/UI/wood_icon.png" id="6_oo54l"]
 [ext_resource type="Texture2D" uid="uid://xw8qch3rm10c" path="res://models/UI/stone_icon.png" id="7_kpybi"]
 [ext_resource type="Texture2D" uid="uid://d4kdtgo7gcxdp" path="res://models/UI/wide_button_hovered.png" id="7_lakw3"]
 [ext_resource type="Script" uid="uid://p4dmb5phpmbn" path="res://scripts/map_bounds.gd" id="7_rup4s"]
 [ext_resource type="Texture2D" uid="uid://da0o3jjhp64nl" path="res://models/UI/food_icon.png" id="9_ctatt"]
 [ext_resource type="Texture2D" uid="uid://coivs0wyoiar7" path="res://models/UI/grid_formattion.png" id="9_lakw3"]
+[ext_resource type="PackedScene" uid="uid://pp6m1b8jtcag" path="res://scenes/Stone.tscn" id="10_4kbfs"]
 [ext_resource type="Texture2D" uid="uid://vcthaut3etvg" path="res://models/UI/menu_button.png" id="10_munwf"]
 [ext_resource type="Texture2D" uid="uid://ci5y5d7ixx7sf" path="res://models/UI/split_formattion.png" id="10_pm21f"]
 [ext_resource type="PackedScene" uid="uid://de14mclc6k1rh" path="res://scenes/TurtleHQ.tscn" id="11_e3hyu"]
@@ -1527,6 +1528,15 @@ transform = Transform3D(0.9600591, 0, 0, 0, 0.9600591, 0, 0, 0, 0.9600591, 2.619
 
 [node name="@Node3D@54908" parent="ForestPatch4" unique_id=614040635 instance=ExtResource("27_ts3gi")]
 transform = Transform3D(0.9789703, 0, 0, 0, 0.9789703, 0, 0, 0, 0.9789703, 2.616361, 0, -1.3270613)
+
+[node name="Stone" parent="." unique_id=2081661951 instance=ExtResource("10_4kbfs")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 8, 0.20000002, 18)
+
+[node name="Stone2" parent="." unique_id=193235117 instance=ExtResource("10_4kbfs")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 10.9, 0.20000002, 18.3)
+
+[node name="Stone3" parent="." unique_id=1339694268 instance=ExtResource("10_4kbfs")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 9, 0.2, 20)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=473008752]
 navigation_mesh = SubResource("NavigationMesh_k0juu")

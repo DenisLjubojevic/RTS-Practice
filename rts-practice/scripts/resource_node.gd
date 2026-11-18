@@ -14,7 +14,7 @@ func get_interaction_range() -> float:
 	var shape: Shape3D = shape_node.shape
 	if shape is BoxShape3D:
 		var size: Vector3 = (shape as BoxShape3D).size
-		return Vector2(size.x, size.z).length() * 0.5 + 0.3
+		return Vector2(size.x, size.z).length() * 0.5 + 0.35
 	return 2.0
 
 func take(request: int) -> int:
