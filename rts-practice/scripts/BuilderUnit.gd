@@ -8,8 +8,19 @@ enum Task { NONE, BUILD, HARVEST, DELIVER }
 @export var carry_capacity: int = 10
 @export var axe: Node3D
 @export var hammer: Node3D
+@export var box: Node3D
+
+const TASK_VISUALS: Dictionary = {
+	Task.NONE:    {"anim": "", "tool": "", "moving": false},
+	Task.BUILD:   {"anim": "Building", "tool": "hammer", "moving": false},
+	Task.HARVEST: {"anim": "Chop", "tool": "axe", "moving": false},
+	Task.DELIVER: {"anim": "Delivery", "tool": "box", "moving": true},
+}
 
 var task: Task = Task.NONE
+var tools: Dictionary = {}
+var _working: bool = false
+
 var build_target: Node3D = null
 var harvest_target: ResourceNode = null
 var dropoff_target: Node3D = null
@@ -22,6 +33,29 @@ var _default_desired_distance: float
 func _ready() -> void:
 	super._ready()
 	_default_desired_distance = navigation_agent.target_desired_distance
+	tools = {"axe": axe, "hammer": hammer, "box": box}
+	refresh_visuals()
+
+func set_task(new_task: Task) -> void:
+	task = new_task
+	_working = false
+	refresh_visuals()
+
+func set_working(value: bool) -> void:
+	if _working == value:
+		return
+	_working = value
+	refresh_visuals()
+
+func refresh_visuals() -> void:
+	var visuals: Dictionary = TASK_VISUALS[task]
+	var active: bool = _working or visuals["moving"]
+	work_animation = visuals["anim"] if _working else ""
+	move_animation = visuals["anim"] if visuals["moving"] else "walk"
+	for tool_name in tools:
+		var tool_node: Node3D = tools[tool_name]
+		if tool_node != null:
+			tool_node.visible = active and tool_name == visuals["tool"]
 
 func moveUnit(newMovementGoal: Vector3 = Vector3.ZERO) -> void:
 	clear_task()
@@ -32,29 +66,17 @@ func go_to(pos: Vector3, stop_distance: float) -> void:
 	super.moveUnit(pos)
 
 func clear_task() -> void:
-	task = Task.NONE
 	build_target = null
 	harvest_target = null
 	dropoff_target = null
 	_gather_buffer = 0.0
 	navigation_agent.target_desired_distance = _default_desired_distance
-	set_work("", false, "all")
-
-func set_work(anim: String, tool_visible: bool, type_of_tool: String) -> void:
-	work_animation = anim
-	if axe != null && type_of_tool.contains("axe"):
-		axe.visible = tool_visible
-	if hammer != null && type_of_tool.contains("hammer"):
-		hammer.visible = tool_visible
-	if type_of_tool.contains("all"):
-		axe.visible = tool_visible
-		hammer.visible = tool_visible
+	set_task(Task.NONE)
 
 func assign_to_build(building: Node3D) -> void:
 	clear_task()
-	task = Task.BUILD
+	set_task(Task.BUILD)
 	build_target = building
-	set_work("Building", true, "hammer")
 	go_to(building.position, building.get_interaction_range())
 
 func stop_building(building: Node3D = null) -> void:
@@ -69,7 +91,7 @@ func assign_to_harvest(resource: ResourceNode) -> void:
 	if carried_type != resource.resource_type:
 		carried_amount = 0
 	carried_type = resource.resource_type
-	task = Task.HARVEST
+	set_task(Task.HARVEST)
 	harvest_target = resource
 	if carried_amount >= carry_capacity:
 		start_delivery()
@@ -77,12 +99,11 @@ func assign_to_harvest(resource: ResourceNode) -> void:
 		go_to_resource(resource)
 
 func start_delivery() -> void:
-	set_work("", false, "all")
 	dropoff_target = find_dropoff()
 	if dropoff_target == null:
 		clear_task()
 		return
-	task = Task.DELIVER
+	set_task(Task.DELIVER)
 	go_to(dropoff_target.global_position, dropoff_target.get_interaction_range())
 
 func find_dropoff() -> Node3D:
@@ -115,20 +136,21 @@ func process_build(delta: float) -> void:
 	if not is_instance_valid(build_target):
 		clear_task()
 		return
-	var dist: float = global_position.distance_to(build_target.global_position)
-	if dist <= build_target.get_interaction_range():
+	var in_range: bool = global_position.distance_to(build_target.global_position) <= build_target.get_interaction_range()
+	set_working(in_range)
+	if in_range:
 		build_target.add_build_progress(build_power * delta)
 
 func process_harvest(delta: float) -> void:
 	if not is_instance_valid(harvest_target) or harvest_target.amount <= 0:
-		set_work("", false, "all")
+		set_working(false)
 		on_harvest_target_lost()
 		return
-	if global_position.distance_to(harvest_target.global_position) > harvest_target.get_interaction_range():
-		set_work("", false, "all")
+	var in_range: bool = global_position.distance_to(harvest_target.global_position) <= harvest_target.get_interaction_range()
+	set_working(in_range)
+	if not in_range:
 		return
 	
-	set_work("Chop", true, "axe")
 	_gather_buffer += harvest_rate * delta
 	var whole: int = int(_gather_buffer)
 	if whole <= 0:
@@ -168,7 +190,7 @@ func process_delivery() -> void:
 	
 	Globals.add_resource(carried_type, carried_amount)
 	carried_amount = 0
-	task = Task.HARVEST
+	set_task(Task.HARVEST)
 	if is_instance_valid(harvest_target) and harvest_target.amount > 0:
 		go_to_resource(harvest_target)
 	else:

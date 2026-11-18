@@ -7,6 +7,7 @@ var stuckMax : int = 9
 var stuckCount: int = 0
 var lastPosition: Vector3
 var work_animation: String = ""
+var move_animation: String = "walk"
 
 @onready var selection_circle: MeshInstance3D = $SelectionCircle
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
@@ -43,7 +44,7 @@ func _physics_process(delta: float) -> void:
 	if Engine.get_physics_frames() % 3 == 0:
 		position.y = graviryRaycast.get_collision_point().y
 	
-	animPlayer.play("walk")
+	animPlayer.play(move_animation)
 	var nextPosition: Vector3 = navigation_agent.get_next_path_position()
 	var direction: Vector3 = global_position.direction_to(nextPosition) * navigation_agent.max_speed
 	
