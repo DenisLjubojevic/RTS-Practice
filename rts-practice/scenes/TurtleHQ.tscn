@@ -10,6 +10,10 @@ size = Vector3(3.2, 2.8, 3.2)
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0, 0)
 script = ExtResource("1_vsqai")
 accepts_resources = true
+resources_required = {
+"stone": 0,
+"wood": 20
+}
 
 [node name="Model" type="MeshInstance3D" parent="." unique_id=1265049942]
 mesh = ExtResource("1_wbqq6")

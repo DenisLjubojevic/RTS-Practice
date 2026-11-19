@@ -1,2 +1,2 @@
-"ID";"NAME";"SCENE";"ICON"
-0;"TurtleHQ";"res://scenes/TurtleHQ.tscn";"res://image/icons/TurtleHQ.png"
+"ID";"NAME";"SCENE";"ICON";"WOOD";"STONE";"FOOD"
+0;"TurtleHQ";"res://scenes/TurtleHQ.tscn";"res://image/icons/TurtleHQ.png";20;0;0

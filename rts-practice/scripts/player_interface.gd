@@ -27,6 +27,8 @@ var selectedBuilding: Node3D = null
 var _selected_building_scene_path: String = "res://scenes/TurtleHQ.tscn"
 var construction_sites: Dictionary = {}
 var current_formation: String = "none"
+var build_buttons: Array = []   # [{"button": Button, "cost": Dictionary}]
+var _selected_building_cost: Dictionary = {}
 
 # Dragging
 var drag_start: Vector2 = Vector2.ZERO
@@ -74,6 +76,7 @@ func _ready() -> void:
 	splitFormationButton.pressed.connect(func(): current_formation = "split"; formationContainer.hide(); apply_formation_in_place())
 	
 	menuButton.pressed.connect(open_pause_menu)
+	Globals.resource_changed.connect(func(_type, _amount): refresh_build_buttons())
 
 func open_pause_menu() -> void:
 	_interface_input_mode = 0
@@ -83,9 +86,26 @@ func populate_build_menu() -> void:
 	var buildings_data: Dictionary = Globals.data["buildings"]
 	for building_id in buildings_data.keys():
 		var info: Dictionary = buildings_data[building_id]
-		var btn := make_icon_button(info["ICON"], str(info.get("NAME", "")))
-		btn.pressed.connect(_on_building_option_pressed.bind(info["SCENE"]))
+		var cost: Dictionary = Globals.get_building_cost(info)
+		
+		var btn := make_icon_button(info["ICON"], "%s\n%s" % [info.get("NAME", ""), cost_text(cost)])
+		btn.pressed.connect(_on_building_option_pressed.bind(info["SCENE"], cost))
 		buildGrid.add_child(btn)
+		build_buttons.append({"button": btn, "cost": cost})
+	refresh_build_buttons()
+
+func cost_text(cost: Dictionary) -> String:
+	var parts := PackedStringArray()
+	for type in cost:
+		if cost[type] > 0:
+			parts.append("%s %d" % [type.capitalize(), cost[type]])
+	return ", ".join(parts) if parts.size() > 0 else "Free"
+
+func refresh_build_buttons() -> void:
+	for entry in build_buttons:
+		var can: bool = Globals.can_afford(entry["cost"])
+		entry["button"].disabled = not can
+		entry["button"].modulate = Color.WHITE if can else Color(0.45, 0.45, 0.45)
 
 func make_icon_button(icon_path: String, tooltip: String) -> Button:
 	var btn := Button.new()
@@ -104,8 +124,9 @@ func _on_formation_button_pressed() -> void:
 	formationContainer.visible = not formationContainer.visible
 	buildGrid.visible = false
 
-func _on_building_option_pressed(scene_path: String) -> void:
+func _on_building_option_pressed(scene_path: String, cost: Dictionary) -> void:
 	_selected_building_scene_path = scene_path
+	_selected_building_cost = cost
 	buildGrid.hide()
 	_interface_input_mode = 1
 
@@ -114,7 +135,8 @@ func _on_building_selected(building: Node3D) -> void:
 		buildingLabel.text = building.building_type
 	else:
 		buildingLabel.text = "Not recognized building"
-	buildingPanel.show()
+	if building.get("is_constructed"):
+		buildingPanel.show()
 
 func update_selection_ui() -> void:
 	var has_builder: bool = false
@@ -307,6 +329,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventMouseButton and not event.pressed:
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				if _building_placer_can_place and _building_placer_location != Vector3.ZERO:
+					if not Globals.spend_resources(_selected_building_cost):
+						_interface_input_mode = 0
+						return
 					var building_packed_scene: PackedScene = load("res://scenes/TurtleHQ.tscn")
 					var buildingNode: Node3D = building_packed_scene.instantiate()
 					get_parent().add_child(buildingNode, true)
@@ -325,8 +350,7 @@ func _unhandled_input(event: InputEvent) -> void:
 					
 					if assigned_any:
 						register_construction_site(buildingNode)
-					
-					if !shift:
+					if !shift or not Globals.can_afford(_selected_building_cost):
 						_interface_input_mode = 0
 				else:
 					_interface_input_mode = 0
